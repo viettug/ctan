@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# $Id$
+
 DESTDIR=$HOME/.ctan/
 CTAN_CONTRIB=http://ctan.org/tex-archive/macros/latex/contrib/
 
