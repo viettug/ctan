@@ -100,8 +100,9 @@ ctan_usage()
 	msg
 	msg "EXAMPLES"
 	msg
-	msg "\tctan grep theorem"
-	msg "\tctan grep ^n"
+	msg "\tctan grep theorem\t# search for packages match 'theorem'"
+	msg "\tctan grep ^n\t# search for packages srated by 'n'"
+	msg "\tctan get ^n\t# download packages started by 'n'"
 }
 
 ctan_arg()

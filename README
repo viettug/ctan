@@ -18,14 +18,16 @@ VERSION
 
 USAGE
 
+	ctan :	show all information about this tool
 	ctan grep <string> :	search packages match <string>. grep ability is supported.
 	ctan update :	update the package list (require lynx, wc and internet connection).
 	ctan get <string> :	download packages match <string> to working directory (require wget).
 
 EXAMPLES
 
-	ctan grep theorem
-	ctan grep ^n
+	ctan grep theorem	# search for packages match 'theorem'
+	ctan grep ^n	# search for packages srated by 'n'
+	ctan get ^n	# download packages started by 'n'
 
 TODO
 
