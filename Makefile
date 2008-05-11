@@ -9,7 +9,7 @@ filelist:
 distro:
 	@chmod +x ./ctan
 	@rm -fv ctan.zip
-	@zip -9r ctan_tools.zip ../ctan.tools/ -x "svn*" -x "*~"
+	@zip -9r ctan_tools.zip ../ctan.tools/ -x "*svn*" -x "*~"
 
 all: readme filelist distro
 
