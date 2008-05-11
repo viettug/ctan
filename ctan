@@ -31,6 +31,9 @@ ctan_search()
 {
 	[[ -f $DESTDIR/packages.txt ]] || ctan_update -firsttime
 	grep $* $DESTDIR/packages.txt
+	if [[ $? -gt 0 ]]; then
+		msg "not package found"
+	fi
 }
 
 ctan_get()
