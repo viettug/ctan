@@ -70,16 +70,7 @@ ctan_about()
 	msg
 	msg	"\t1.0.0 2008/05/11: first version"
 	msg
-	msg "USAGE"
-	msg
-	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported."
-	msg "\tctan update :\tupdate the package list (require lynx, wc and internet connection)."
-	msg "\tctan get <string> :\tdownload packages match <string> to working directory (require wget)."
-	msg
-	msg "EXAMPLES"
-	msg
-	msg "\tctan grep theorem"
-	msg "\tctan grep ^n"
+	ctan_usage
 	msg
 	msg "TODO"
 	msg
@@ -96,6 +87,21 @@ ctan_about()
 	msg "\tFeel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome."
 	msg
 	
+}
+
+ctan_usage()
+{
+	msg "USAGE"
+	msg
+	msg "\tctan :\tshow all information about this tool"
+	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported."
+	msg "\tctan update :\tupdate the package list (require lynx, wc and internet connection)."
+	msg "\tctan get <string> :\tdownload packages match <string> to working directory (require wget)."
+	msg
+	msg "EXAMPLES"
+	msg
+	msg "\tctan grep theorem"
+	msg "\tctan grep ^n"
 }
 
 ctan_arg()
@@ -118,5 +124,7 @@ elif [[ "x$1" == "xget" ]]; then
 	shift
 	ctan_arg $1
 	ctan_get $*
+else
+	ctan_usage	
 fi
 
