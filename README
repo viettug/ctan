@@ -1,0 +1,43 @@
+ABOUT
+
+	This small tool is used to seach some LaTeX packages that were listed in CTAN:
+		 http://ctan.org/tex-archive/macros/latex/contrib/.
+
+	The tool requires wget, lynx, gawk, wc and sed program to run correctly.
+	Some linux distribution doesnot contains lynx by default
+	and you must install lynx manually before running ./ctan.
+
+	So this tool requires a *nix-liked environment to work.
+
+	This tool was written by kyanh <xkyanh@gmail.com>
+	kyanh is a member of Vietnamese TeX Users Group <http://viettug.org>.
+
+VERSION
+
+	1.0.0 2008/05/11: first version
+
+USAGE
+
+	ctan grep <string> :	search packages match <string>. grep ability is supported.
+	ctan update :	update the package list (require lynx, wc and internet connection).
+	ctan get <string> :	download packages match <string> to working directory (require wget).
+
+EXAMPLES
+
+	ctan grep theorem
+	ctan grep ^n
+
+TODO
+
+	* package information supported
+	* ability to select FTP mirror
+	* search by filename, description,...
+	* package build script
+
+LICENSE
+
+	This tool is published under LGPL.
+
+BUGS
+	Feel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome.
+
