@@ -3,8 +3,6 @@
 DESTDIR=$HOME/.ctan/
 CTAN_CONTRIB=http://ctan.org/tex-archive/macros/latex/contrib/
 
-mkdir -pv $DESTDIR
-
 msg()
 {
 	echo -e ":: $*"
@@ -12,6 +10,12 @@ msg()
 
 ctan_update()
 {
+	if [[ "x$1" == "x-firsttime" ]]; then
+		msg "This maybe the first time you use the tool. The directory ~/.ctan"
+		msg "will be created and the tool tries to download some information from"
+		msg "\t$CTAN_CONTRIB."
+	fi
+	mkdir -pv $DESTDIR
 	msg "dumping $CTAN_CONTRIB..."
 	lynx -dump $CTAN_CONTRIB > $DESTDIR/contrib.txt
 	grep -E '^[ ]*\[[0-9]+\][^ ]+/' $DESTDIR/contrib.txt \
@@ -25,7 +29,7 @@ ctan_update()
 
 ctan_search()
 {
-	[[ -f $DESTDIR/packages.txt ]] || ctan_update
+	[[ -f $DESTDIR/packages.txt ]] || ctan_update -firsttime
 	grep $* $DESTDIR/packages.txt
 }
 
