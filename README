@@ -1,6 +1,6 @@
 ABOUT
 
-	This small tool is used to seach some LaTeX packages that were listed in CTAN:
+	This small tool is used to seach/download some LaTeX packages that were listed in CTAN:
 		 http://ctan.org/tex-archive/macros/latex/contrib/.
 
 	The tool requires wget, lynx, gawk, wc and sed program to run correctly.
@@ -38,7 +38,7 @@ TODO
 
 LICENSE
 
-	This tool is published under LGPL.
+	This tool is published under LPPL.
 
 BUGS
 	Feel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome.

@@ -58,7 +58,7 @@ ctan_about()
 {
 	msg "ABOUT"
 	msg
-	msg "\tThis small tool is used to seach some LaTeX packages that were listed in CTAN:"
+	msg "\tThis small tool is used to seach/download some LaTeX packages that were listed in CTAN:"
 	msg "\t\t $CTAN_CONTRIB."
 	msg
 	msg "\tThe tool requires wget, lynx, gawk, wc and sed program to run correctly."
@@ -85,7 +85,7 @@ ctan_about()
 	msg
 	msg "LICENSE"
 	msg
-	msg "\tThis tool is published under LGPL."
+	msg "\tThis tool is published under LPPL."
 	msg
 	msg "BUGS"
 	msg "\tFeel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome."
