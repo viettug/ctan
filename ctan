@@ -128,6 +128,7 @@ ctan_about()
 	msg
 	msg	"\t1.0.0 2008/05/11: first version"
 	msg	"\t1.1.0 2008/05/15: search for files (use cache file)"
+	msg	"\t1.1.1 2008/05/15: fix bug (ctan_update)"
 	msg
 	ctan_usage
 	msg
