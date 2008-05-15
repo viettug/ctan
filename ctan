@@ -34,8 +34,8 @@ ctan_update()
 	msg "uncompressing $DESTDIR/dump_files.tbz..."
 	tar xfj $DESTDIR/dump_files.tbz -C $DESTDIR
 	msg "parsing $DESTDIR/dump_files.txt..."
-	grep tex-archive/ dump_files.txt | sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' | gawk '{print $2}' |sort -u > $DESTDIR/dirs.txt
-	grep -E '^\[[0-9]+\][^ ]+' dump_files.txt | gawk -F']' '{print $2}'|sort -u > $DESTDIR/files.txt
+	grep tex-archive/ $DESTDIR/dump_files.txt | sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' | gawk '{print $2}' |sort -u > $DESTDIR/dirs.txt
+	grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt | gawk -F']' '{print $2}'|sort -u > $DESTDIR/files.txt
 	msg "removing $DESTDIR/dump_files.txt as it is too big..."
 	rm -rfv "$DESTDIR/dump_files.txt"
 	msg "* Files updates: $DESTDIR/{files,contrib,packages,dirs}.txt"
