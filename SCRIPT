@@ -1,0 +1,16 @@
+ctan_all_files:
+
+	1.
+		(a) search for a file by name 
+			lynx -dump 'http://ctan.org/cgi-bin/filenameSearch.py?filename=.' > dump_files.txt
+		(b) get the name of package + package description containing a file (cannot use as static)
+			http://ctan.org/cgi-bin/search.py?tdsFilename=.&firstNumber=0&numberResults=2000000
+		(c) search for package description
+			lynx -dump 'http://ctan.org/cgi-bin/search.py?metadataSearch=.&firstNumber=0&numberResults=2000000' > dump_descs.txt
+	
+	
+	2. grep tex-archive/ dump_files.txt | sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' | gawk '{print $2}' |sort -u > dirs.txt
+		=> directories name
+	3. grep -E '^\[[0-9]+\][^ ]+' dump_files.txt | gawk -F']' '{print $2}'|sort -u > files.txt
+		=> files name
+
