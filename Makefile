@@ -8,7 +8,7 @@ filelist:
 
 distro:
 	@chmod +x ./ctan
-	@rm -fv ctan.zip
+	@rm -fv ctan_tools.zip
 	@zip -9r ctan_tools.zip ../ctan.tools/ -x "*svn*" -x "*~"
 
 install:
