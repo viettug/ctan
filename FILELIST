@@ -1,6 +1,6 @@
 FILELIST
+INSTALL
 Makefile
 README
-contrib.txt
+SCRIPT
 ctan
-packages.txt

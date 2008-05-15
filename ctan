@@ -3,7 +3,9 @@
 # $Id$
 
 DESTDIR=$HOME/.ctan/
-CTAN_CONTRIB=http://ctan.org/tex-archive/macros/latex/contrib/
+CTAN_ARCHIVE=http://ctan.org/tex-archive
+CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/
+KYANHNET_REPOS=http://kyanh.net/ctan.tools/
 
 msg()
 {
@@ -20,21 +22,38 @@ ctan_update()
 	mkdir -pv $DESTDIR
 	msg "dumping $CTAN_CONTRIB..."
 	lynx -dump $CTAN_CONTRIB > $DESTDIR/contrib.txt
+	msg "getting $KYANHNET_REPOS/ctan.tools/dump_files.tbz..."
+	wget $KYANHNET_REPOS/dump_files.tbz -O $DESTDIR/dump_files.tbz
+	msg "parsing $DESTDIR/contrib.txt to create list of packages (with last update)..."
 	grep -E '^[ ]*\[[0-9]+\][^ ]+/' $DESTDIR/contrib.txt \
 		|gawk '{printf("%s, %s\n", $1,$2);}' \
 		|sed \
 			-e 's/\/, /\t/g' \
 			-e 's#\[[0-9]\+\]##g'	\
 		> $DESTDIR/packages.txt
-	msg "`wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"	
+	msg "uncompressing $DESTDIR/dump_files.tbz..."
+	tar xfj $DESTDIR/dump_files.tbz -C $DESTDIR
+	msg "parsing $DESTDIR/dump_files.txt..."
+	grep tex-archive/ dump_files.txt | sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' | gawk '{print $2}' |sort -u > $DESTDIR/dirs.txt
+	grep -E '^\[[0-9]+\][^ ]+' dump_files.txt | gawk -F']' '{print $2}'|sort -u > $DESTDIR/files.txt
+	msg "removing $DESTDIR/dump_files.txt as it is too big..."
+	rm -rfv "$DESTDIR/dump_files.txt"
+	msg "* Files updates: $DESTDIR/{files,contrib,packages,dirs}.txt"
+	msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"	
 }
 
 ctan_search()
 {
 	[[ -f $DESTDIR/packages.txt ]] || ctan_update -firsttime
-	grep $* $DESTDIR/packages.txt
+	if [[ "x$1" == "x-file" ]]; then
+		shift
+		grep $* $DESTDIR/files.txt | grep -v obsolete
+	else # search for package name	
+		grep $* $DESTDIR/packages.txt | grep -v obsolete
+	fi	
 	if [[ $? -gt 0 ]]; then
-		msg "not package found"
+		msg "not package/file found"
+		return 1
 	fi
 }
 
@@ -42,21 +61,43 @@ ctan_get()
 {
 	ctan_search $* > $DESTDIR/tmp.txt
 	if [[ $? -gt 0 ]]; then
-		msg "not package matches `$*`"
+		msg "not package matches '$*'"
 		return
 	fi
-	gawk '{print $1}' $DESTDIR/tmp.txt > $DESTDIR/tmp2.txt
-	for pkg in `cat $DESTDIR/tmp2.txt`; do
-		msg "$pkg\t $CTAN_CONTRIB/$pkg.zip";
-	done
-	read -n 1 -p "Are you sure you want to download (y/N)?" download
-	if [[ "x$download" == "xy" ]]; then
-		msg
-		for f in `cat $DESTDIR/tmp2.txt`; do
-			msg "downloading $pkg..."
-			wget -c "$CTAN_CONTRIB/$pkg.zip";
-		done	
+	if [[ "x$1" == "x-file" ]]; then
+		shift
+		ctan_grep_type='file'
+	else
+		ctan_grep_type='pkg'
 	fi
+	if [[ "$ctan_grep_type" == "file" ]]; then		
+		for pkg in `cat $DESTDIR/tmp.txt`; do
+			msg "$CTAN_ARCHIVE/$pkg";			
+		done
+		msg
+		read -n 1 -p "Are you sure you want to download (y/N)?" download
+		if [[ "x$download" == "xy" ]]; then
+			msg
+			for pkg in `cat $DESTDIR/tmp.txt`; do
+				msg "downloading $pkg..."
+				wget -c "$CTAN_ARCHIVE/$pkg";
+			done				
+		fi		
+	else
+		gawk '{print $1}' $DESTDIR/tmp.txt > $DESTDIR/tmp2.txt
+		for pkg in `cat $DESTDIR/tmp2.txt`; do
+			msg "$pkg\t $CTAN_CONTRIB/$pkg.zip";
+		done
+		msg
+		read -n 1 -p "Are you sure you want to download (y/N)?" download
+		if [[ "x$download" == "xy" ]]; then
+			msg
+			for f in `cat $DESTDIR/tmp2.txt`; do
+				msg "downloading $pkg..."
+				wget -c "$CTAN_CONTRIB/$pkg.zip";
+			done	
+		fi
+	fi	
 }
 
 ctan_about()
@@ -64,20 +105,29 @@ ctan_about()
 	msg "ABOUT"
 	msg
 	msg "\tThis small tool is used to seach/download some LaTeX packages that were listed in CTAN:"
-	msg "\t\t $CTAN_CONTRIB."
+	msg "\t\t$CTAN_CONTRIB"
+	msg "\tor search/download for any files in"
+	msg "\t\t$CTAN_ARCHIVE/."
+	msg ""
+	msg "\tSince version 1.0.1, the tools will use the cache file"
+	msg "\t\t$KYANHNET_REPOS/dump_files.tbz"
+	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
+	msg "\tby http://kyanh.net/. The size of file is about 3MB (compressed) & 15MB (un-compressed)."
 	msg
-	msg "\tThe tool requires wget, lynx, gawk, wc and sed program to run correctly."
-	msg "\tSome linux distribution doesnot contains lynx by default"
-	msg "\tand you must install lynx manually before running $0".
+	msg "\tThe tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly."
+	msg "\tSome linux distribution doesnot contains lynx by default and you must install lynx manually"
+	msg "\tbefore running this script".
 	msg
 	msg "\tSo this tool requires a *nix-liked environment to work."
 	msg
 	msg "\tThis tool was written by kyanh <xkyanh@gmail.com>"
 	msg "\tkyanh is a member of Vietnamese TeX Users Group <http://viettug.org>."
+	msg "\tHe wrote this script as he wanted a fast client to access CTAN."
 	msg
 	msg "VERSION"
 	msg
 	msg	"\t1.0.0 2008/05/11: first version"
+	msg	"\t1.1.0 2008/05/15: search for files (use cache file)"
 	msg
 	ctan_usage
 	msg
@@ -85,7 +135,7 @@ ctan_about()
 	msg
 	msg "\t* package information supported"
 	msg "\t* ability to select FTP mirror"
-	msg "\t* search by filename, description,..."
+	msg "\t* search by package description,..."
 	msg "\t* package build script"
 	msg
 	msg "LICENSE"
@@ -103,15 +153,21 @@ ctan_usage()
 	msg "USAGE"
 	msg
 	msg "\tctan :\tshow all information about this tool"
+	msg "\tctan update :\tupdate the package list (require lynx, wc, tar/bzip and internet connection)."
 	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported."
-	msg "\tctan update :\tupdate the package list (require lynx, wc and internet connection)."
-	msg "\tctan get <string> :\tdownload packages match <string> to working directory (require wget)."
+	msg "\tctan get <string> :\tdownload packages match <string> to working directory."
+	msg
+	msg "\tIf you want to search for files:"
+	msg
+	msg "\tctan grep -file <string> :\tsearch for files."
+	msg "\tctan get -file <string> :\tdownload files match <string> to working directory."
 	msg
 	msg "EXAMPLES"
 	msg
 	msg "\tctan grep theorem\t# search for packages match 'theorem'"
 	msg "\tctan grep ^n\t# search for packages srated by 'n'"
 	msg "\tctan get ^n\t# download packages started by 'n'"
+	msg "\tctan get -file contrib/ntheorem.zip"
 }
 
 ctan_arg()
