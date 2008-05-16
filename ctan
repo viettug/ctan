@@ -19,26 +19,24 @@ ctan_update()
 		msg "will be created and the tool tries to download some information from"
 		msg "\t$CTAN_CONTRIB."
 	fi
+
 	mkdir -pv $DESTDIR
+
 	msg "dumping $CTAN_CONTRIB..."
 	lynx -dump $CTAN_CONTRIB > $DESTDIR/contrib.txt
-	msg "getting $KYANHNET_REPOS/ctan.tools/dump_files.tbz..."
-	wget $KYANHNET_REPOS/dump_files.tbz -O $DESTDIR/dump_files.tbz
-	msg "parsing $DESTDIR/contrib.txt to create list of packages (with last update)..."
 	grep -E '^[ ]*\[[0-9]+\][^ ]+/' $DESTDIR/contrib.txt \
 		|gawk '{printf("%s, %s\n", $1,$2);}' \
 		|sed \
 			-e 's/\/, /\t/g' \
 			-e 's#\[[0-9]\+\]##g'	\
 		> $DESTDIR/packages.txt
-	msg "uncompressing $DESTDIR/dump_files.tbz..."
-	tar xfj $DESTDIR/dump_files.tbz -C $DESTDIR
-	msg "parsing $DESTDIR/dump_files.txt..."
-	grep tex-archive/ $DESTDIR/dump_files.txt | sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' | gawk '{print $2}' |sort -u > $DESTDIR/dirs.txt
-	grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt | gawk -F']' '{print $2}'|sort -u > $DESTDIR/files.txt
-	msg "removing $DESTDIR/dump_files.txt as it is too big..."
-	rm -rfv "$DESTDIR/dump_files.txt"
-	msg "* Files updates: $DESTDIR/{files,contrib,packages,dirs}.txt"
+
+	msg "getting $KYANHNET_REPOS/ctan.tools/dump_files.tbz..."
+	wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
+	msg "uncompressing $DESTDIR/cache.tbz..."
+	tar xfj $DESTDIR/cache.tbz -C $DESTDIR
+
+	msg "* Files updated: $DESTDIR/{files,contrib,packages,dirs}.txt"
 	msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"	
 }
 
@@ -109,8 +107,8 @@ ctan_about()
 	msg "\tor search/download for any files in"
 	msg "\t\t$CTAN_ARCHIVE/."
 	msg ""
-	msg "\tSince version 1.0.1, the tools will use the cache file"
-	msg "\t\t$KYANHNET_REPOS/dump_files.tbz"
+	msg "\tSince version 1.0.1, the tool will use the cache file"
+	msg "\t\t$KYANHNET_REPOS/cache.tbz"
 	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
 	msg "\tby http://kyanh.net/. The size of file is about 3MB (compressed) & 15MB (un-compressed)."
 	msg
@@ -129,6 +127,7 @@ ctan_about()
 	msg	"\t1.0.0 2008/05/11: first version"
 	msg	"\t1.1.0 2008/05/15: search for files (use cache file)"
 	msg	"\t1.1.1 2008/05/15: fix bug (ctan_update)"
+	msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
 	msg
 	ctan_usage
 	msg
