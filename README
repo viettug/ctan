@@ -5,10 +5,10 @@ ABOUT
 	or search/download for any files in
 		http://ctan.org/tex-archive/.
 
-	Since version 1.0.1, the tools will use the cache file
-		http://kyanh.net/ctan.tools//dump_files.tbz
+	Since version 1.0.1, the tool will use the cache file
+		http://kyanh.net/ctan.tools//cache.tbz
 	This file contains the list of all files in CTAN. It's updated daily by a cron job hosted
-	by http://kyanh.net/. The size of file is about 3MB (compressed) & 15MB (un-compressed).
+	by http://kyanh.net/. The size of file is about 500k.
 
 	The tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly.
 	Some linux distribution doesnot contains lynx by default and you must install lynx manually
@@ -24,6 +24,8 @@ VERSION
 
 	1.0.0 2008/05/11: first version
 	1.1.0 2008/05/15: search for files (use cache file)
+	1.1.1 2008/05/15: fix bug (ctan_update)
+	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
 
 USAGE
 

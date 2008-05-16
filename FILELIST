@@ -4,3 +4,4 @@ Makefile
 README
 SCRIPT
 ctan
+ctan_dump_files
