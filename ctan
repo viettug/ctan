@@ -31,7 +31,7 @@ ctan_update()
 			-e 's#\[[0-9]\+\]##g'	\
 		> $DESTDIR/packages.txt
 
-	msg "getting $KYANHNET_REPOS/ctan.tools/dump_files.tbz..."
+	msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
 	wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
 	msg "uncompressing $DESTDIR/cache.tbz..."
 	tar xfj $DESTDIR/cache.tbz -C $DESTDIR
