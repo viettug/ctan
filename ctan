@@ -110,7 +110,7 @@ ctan_about()
 	msg "\tSince version 1.0.1, the tool will use the cache file"
 	msg "\t\t$KYANHNET_REPOS/cache.tbz"
 	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
-	msg "\tby http://kyanh.net/. The size of file is about 3MB (compressed) & 15MB (un-compressed)."
+	msg "\tby http://kyanh.net/. The size of file is about 500k."
 	msg
 	msg "\tThe tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly."
 	msg "\tSome linux distribution doesnot contains lynx by default and you must install lynx manually"
