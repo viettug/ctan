@@ -4,7 +4,7 @@
 
 # this file is part of ctan.tools bundle
 # it is executed remotely (http://kyanh.net/)
-# result is saved file to /home/kyanhnet/www/ctan.tools/
+# result is saved in /home/kyanhnet/www/ctan.tools/
 #
 
 msg()
@@ -26,13 +26,13 @@ fi
 
 msg "parsing dump_files.txt..."
 msg "creating list of directories..."
-grep tex-archive/ $DESTDIR/dump_files.txt \
+grep tex-archive/ ./dump_files.txt \
 	|sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' \
 	|gawk '{print $2}' |sort -u \
 	> ./dirs.txt
 
 msg "creating list of files..."
-grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt \
+grep -E '^\[[0-9]+\][^ ]+' ./dump_files.txt \
 	|gawk -F']' '{print $2}'\
 	|sort -u \
 	> ./files.txt
@@ -40,6 +40,6 @@ grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt \
 msg "compressing the results and saving to cache.tbz..."
 tar cfvj cache.tbz dirs.txt files.txt
 
-msg "removing dump_files.txt as it is too big..."
-rm -fv dump_files.txt
+msg "removing {dirs,files,dump_files}.txt as it is too big..."
+rm -fv dump_files.txt dirs.txt files.txt
 
