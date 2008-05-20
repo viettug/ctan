@@ -12,7 +12,9 @@ msg()
 	echo -e ":: $*"
 }
 
-mkdir -p /home/kyanhnet/www/ctan.toosl/
+msg "The time is $SECONDS"
+
+mkdir -p /home/kyanhnet/www/ctan.tools/
 cd /home/kyanhnet/www/ctan.tools/
 
 msg "downloading the list of files..."
@@ -37,9 +39,17 @@ grep -E '^\[[0-9]+\][^ ]+' ./dump_files.txt \
 	|sort -u \
 	> ./files.txt
 
-msg "compressing the results and saving to cache.tbz..."
-tar cfvj cache.tbz dirs.txt files.txt
+msg "creating cache.tar.bz2..."
+tar -j -c -v -f cache.tar.bz2 dirs.txt files.txt
+
+type lzma
+if [[ $? == 0 ]]; then
+	msg "creating cache.tar.lzma...."
+	tar --use-compress-program lzma -c -v -f cache.tar.lzma dirs.txt files.txt
+fi
 
 msg "removing {dirs,files,dump_files}.txt as it is too big..."
 rm -fv dump_files.txt dirs.txt files.txt
+
+msg "The time is $SECONDS"
 
