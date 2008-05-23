@@ -2,44 +2,5 @@
 
 # $Id$
 
-# this file is part of ctan.tools bundle
-# it is executed remotely (http://kyanh.net/)
-# result is saved in /home/kyanhnet/www/ctan.tools/
-#
-
-msg()
-{
-	echo -e ":: $*"
-}
-
-mkdir -p /home/kyanhnet/www/ctan.toosl/
-cd /home/kyanhnet/www/ctan.tools/
-
-msg "downloading the list of files..."
-lynx -dump 'http://ctan.org/cgi-bin/filenameSearch.py?filename=.' > dump_files.txt
-
-if [[ $? -gt 0 ]]; then
-	msg "failed to download from CTAN. exit 1"
-	rm -fv dump_files.txt
-	exit 1
-fi
-
-msg "parsing dump_files.txt..."
-msg "creating list of directories..."
-grep tex-archive/ ./dump_files.txt \
-	|sed -e 's/#/ /g' -e 's#http://ctan.org/tex-archive/# #g' \
-	|gawk '{print $2}' |sort -u \
-	> ./dirs.txt
-
-msg "creating list of files..."
-grep -E '^\[[0-9]+\][^ ]+' ./dump_files.txt \
-	|gawk -F']' '{print $2}'\
-	|sort -u \
-	> ./files.txt
-
-msg "compressing the results and saving to cache.tbz..."
-tar cfvj cache.tbz dirs.txt files.txt
-
-msg "removing {dirs,files,dump_files}.txt as it is too big..."
-rm -fv dump_files.txt dirs.txt files.txt
+# everything was moved to ctan script #
 
