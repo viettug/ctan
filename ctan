@@ -39,6 +39,7 @@ ctan_info()
 {
 		msg "* Files updated: $DESTDIR/{files,contrib,packages,dirs}.txt"
 		msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"		
+		msg "* `wc -l $DESTDIR/files.txt |gawk '{print $1}'` file(s) found"		
 }
 
 ctan_update()
@@ -117,6 +118,9 @@ ctan_update()
 		|gawk -F']' '{print $2}'\
 		|sort -u \
 		> $DESTDIR/files.txt
+	
+	msg "removing dump_files.txt as it's too big..."	
+	rm -fv $DESTDIR/dump_files.txt
 		
 	ctan_info
 }
