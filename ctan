@@ -2,25 +2,83 @@
 
 # $Id$
 
-DESTDIR=$HOME/.ctan/
 CTAN_ARCHIVE=http://ctan.org/tex-archive
 CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/
 KYANHNET_REPOS=http://kyanh.net/ctan.tools/
+DESTDIR=$HOME/.ctan/
+
+# functions
 
 msg()
 {
 	echo -e ":: $*"
 }
 
+ctan_check()
+{
+	type $1 2>/dev/null 1>&2
+	if [[ $? -gt 0 ]]; then
+		ERROR=1
+		msg "not found '$1'"
+	fi	
+}
+
+ctan_check_all()
+{
+	ERROR=0
+	for tool in "lynx wget xx tar bzip2 sed sort gawk"; do
+		ctan_check $tool
+	done
+	if [[ $ERROR == 1 ]]; then
+		msg "error occured. exit 1"
+		exit 1
+	fi
+}
+
+ctan_info()
+{
+		msg "* Files updated: $DESTDIR/{files,contrib,packages,dirs}.txt"
+		msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"		
+}
+
 ctan_update()
 {
-	if [[ "x$1" == "x-firsttime" ]]; then
-		msg "This maybe the first time you use the tool. The directory ~/.ctan"
-		msg "will be created and the tool tries to download some information from"
-		msg "\t$CTAN_CONTRIB."
+	if [[ "x$1" == "x--first-time" ]]; then
+		shift
+		msg "This maybe the first time you use the tool."
+		msg "The directory ~/.ctan will be created"
 	fi
 
 	mkdir -pv $DESTDIR
+
+	msg "update by using cache file..."
+
+	if [[ ( "x$1" == "x" ) || ( "x$1" == "x--use-cache" ) ]]; then
+		msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
+		wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
+
+		msg "uncompressing $DESTDIR/cache.tbz..."
+		tar xfj $DESTDIR/cache.tbz -C $DESTDIR
+
+		msg "removing {dirs,files,dump_files}.txt as it is too big..."
+		rm -fv $DESTDIR/{dump_files.txt,cache.tbz}
+
+		ctan_info
+
+		return 0
+	fi
+
+	# donot use cache
+
+	msg "update will get about 15MB from CTAN and may take very long time."
+	read -n1 -p":: Are you sure you wanna do this (y/N)?" reply
+	msg
+	if [[ ! "x$reply" == "xy" ]]; then
+		msg "Update was cancelled."
+		return 0
+	fi
+
+	# create list of packages ####################################################
 
 	msg "dumping $CTAN_CONTRIB..."
 	lynx -dump $CTAN_CONTRIB > $DESTDIR/contrib.txt
@@ -31,18 +89,41 @@ ctan_update()
 			-e 's#\[[0-9]\+\]##g'	\
 		> $DESTDIR/packages.txt
 
-	msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
-	wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
-	msg "uncompressing $DESTDIR/cache.tbz..."
-	tar xfj $DESTDIR/cache.tbz -C $DESTDIR
+	# create list of files #######################################################
 
-	msg "* Files updated: $DESTDIR/{files,contrib,packages,dirs}.txt"
-	msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"	
+	msg "searching for all files..."
+
+	lynx -dump 'http://ctan.org/cgi-bin/filenameSearch.py?filename=.' \
+		> $DESTDIR/dump_files.txt
+
+	if [[ $? -gt 0 ]]; then
+		msg "failed to download from CTAN. exit 1"
+		rm -fv $DESTDIR/dump_files.txt
+		exit 1
+	fi
+
+	msg "creating list of directories..."
+
+	grep tex-archive/ $DESTDIR/dump_files.txt \
+		|sed \
+			-e 's/#/ /g' \
+			-e 's#http://ctan.org/tex-archive/# #g' \
+		|gawk '{print $2}' |sort -u \
+		> $DESTDIR/dirs.txt
+
+	msg "creating list of files..."
+
+	grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt \
+		|gawk -F']' '{print $2}'\
+		|sort -u \
+		> $DESTDIR/files.txt
+		
+	ctan_info
 }
 
 ctan_search()
 {
-	[[ -f $DESTDIR/packages.txt ]] || ctan_update -firsttime
+	[[ -f $DESTDIR/packages.txt ]] || ctan_update --first-time --use-cache
 	if [[ "x$1" == "x-file" ]]; then
 		shift
 		grep $* $DESTDIR/files.txt | grep -v obsolete
@@ -73,7 +154,7 @@ ctan_get()
 			msg "$CTAN_ARCHIVE/$pkg";			
 		done
 		msg
-		read -n 1 -p "Are you sure you want to download (y/N)?" download
+		read -n 1 -p ":: Are you sure you want to download (y/N)?" download
 		if [[ "x$download" == "xy" ]]; then
 			msg
 			for pkg in `cat $DESTDIR/tmp.txt`; do
@@ -110,7 +191,7 @@ ctan_about()
 	msg "\tSince version 1.0.1, the tool will use the cache file"
 	msg "\t\t$KYANHNET_REPOS/cache.tbz"
 	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
-	msg "\tby http://kyanh.net/. The size of file is about 500k."
+	msg "\tby http://kyanh.net/. The size of file is about 400k."
 	msg
 	msg "\tThe tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly."
 	msg "\tSome linux distribution doesnot contains lynx by default and you must install lynx manually"
@@ -128,6 +209,7 @@ ctan_about()
 	msg	"\t1.1.0 2008/05/15: search for files (use cache file)"
 	msg	"\t1.1.1 2008/05/15: fix bug (ctan_update)"
 	msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
+	msg "\t1.3.0 2008/05/13: everything is cached. Faster. New options. Thanks to texer at VietTUG"
 	msg
 	ctan_usage
 	msg
@@ -137,6 +219,11 @@ ctan_about()
 	msg "\t* ability to select FTP mirror"
 	msg "\t* search by package description,..."
 	msg "\t* package build script"
+	msg
+	msg "THANKS"
+	msg
+	msg "\t* Karl Berry <karl@freefriends.org>"
+	msg "\t* Nguyen Van Hanh <hanhnguyenvan@gmail.com>"
 	msg
 	msg "LICENSE"
 	msg
@@ -152,15 +239,19 @@ ctan_usage()
 {
 	msg "USAGE"
 	msg
-	msg "\tctan :\tshow all information about this tool"
+	msg "\tctan about:\tshow all information about this tool"
+	msg "\tctan usage:\tshow usage"
+	msg
 	msg "\tctan update :\tupdate the package list (require lynx, wc, tar/bzip and internet connection)."
 	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported."
 	msg "\tctan get <string> :\tdownload packages match <string> to working directory."
 	msg
 	msg "\tIf you want to search for files:"
 	msg
-	msg "\tctan grep -file <string> :\tsearch for files."
-	msg "\tctan get -file <string> :\tdownload files match <string> to working directory."
+	msg "\tctan fgrep <string> :\tsearch for files."
+	msg "\tctan fget <string> :\tdownload files match <string> to working directory."
+	msg "\tctan grep -file <string>"
+	msg "\tctan get -file <string>"
 	msg
 	msg "EXAMPLES"
 	msg
@@ -172,25 +263,62 @@ ctan_usage()
 
 ctan_arg()
 {
+	if [[ "x$1" == "x-file" ]]; then
+		shift
+	fi	
 	if [[ "x$1" == "x" ]]; then
 		msg "missing parameter"
 		exit 1
 	fi
 }
 
-if [[ "x$1" == "x" ]]; then
-	ctan_about
-elif [[ "x$1" == "xupdate" ]]; then
-	ctan_update
-elif [[ "x$1" == "xgrep" ]]; then
+# check for requirements or not
+
+case "x$1" in
+"xusage");;
+"xhelp");;
+"x");;
+"xabout");;
+"xdoc");;
+"xversion");;
+*) ctan_check_all;;
+esac
+
+# main program
+
+case "x$1" in
+"xupdate")
 	shift
-	ctan_arg $1
+	ctan_update $*
+	;;
+"xfgrep")
+	shift
+	ctan_arg $*
+	ctan_search -file $*
+	;;
+"xgrep")
+	shift
+	ctan_arg $*
 	ctan_search $*
-elif [[ "x$1" == "xget" ]]; then
+	;;
+"xget")
 	shift
-	ctan_arg $1
+	ctan_arg $*
 	ctan_get $*
-else
-	ctan_usage	
-fi
+	;;
+"xget")
+	shift
+	ctan_arg $*
+	ctan_get -file $*
+	;;
+"x")	ctan_usage;;
+"xusage") ctan_usage;;
+"xhelp") ctan_usage;;
+"xdoc") ctan_about;;
+"xabout") ctan_about;;
+"xversion") grep '^# $Id' $0;;
+*)
+	msg "wrong parameter. please try 'ctan usage'"
+	;;
+esac
 
