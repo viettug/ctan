@@ -59,7 +59,7 @@ ctan_update()
 		wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
 
 		msg "uncompressing $DESTDIR/cache.tbz..."
-		tar xfj $DESTDIR/cache.tbz -C $DESTDIR
+		tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
 
 		msg "removing {dirs,files,dump_files}.txt as it is too big..."
 		rm -fv $DESTDIR/{dump_files.txt,cache.tbz}
@@ -118,7 +118,12 @@ ctan_update()
 		|gawk -F']' '{print $2}'\
 		|sort -u \
 		> $DESTDIR/files.txt
-	
+
+	msg "compressing the results..."
+	cd $DESTDIR \
+		&& tar cfvj .cache.tbz {dirs.txt,files.txt,packages.txt} \
+		&& mv .cache.tbz cache.tbz
+
 	msg "removing dump_files.txt as it's too big..."	
 	rm -fv $DESTDIR/dump_files.txt
 		
