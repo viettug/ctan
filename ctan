@@ -267,7 +267,7 @@ ctan_usage()
 	msg "\tctan get -file contrib/ntheorem.zip"
 	msg "\tctan fget contrib/ntheorem.zip"
 	msg
-	msg	"\tThe results of '-file' option should be filtered"
+	msg	"\tThe result by '-file' option should be filtered"
 	msg
 	msg "\tctan fgrep ntheorem| grep zip"
 	msg 	
