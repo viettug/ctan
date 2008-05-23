@@ -1,7 +1,14 @@
+== Step 1 ==
+
 Just copy `ctan' script to your binaries' directory/
 Some alternatives:
 
 	install -m 755 ./ctan /usr/bin
 	install -m 755 ./ctan /usr/local/bin
 	install -m 755 ./ctan $HOME/bin
+
+== Step 2 ==
+
+Update some information:
+	ctan update
 

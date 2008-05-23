@@ -16,3 +16,8 @@ install:
 
 all: readme filelist distro
 
+upload:
+	@echo "* update remote script"
+	@echo "* update blog"
+	@echo "* update viettug repository"
+
