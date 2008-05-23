@@ -53,6 +53,7 @@ ctan_update()
 	mkdir -pv $DESTDIR
 
 	if [[ ( "x$1" == "x" ) || ( "x$1" == "x--use-cache" ) ]]; then
+		shift
 		msg "update by using cache file..."
 
 		msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
@@ -124,8 +125,13 @@ ctan_update()
 		&& tar cfvj .cache.tbz {dirs.txt,files.txt,packages.txt} \
 		&& mv .cache.tbz cache.tbz
 
-	msg "removing dump_files.txt as it's too big..."	
+	msg "removing dump_files.txt as it's too big..."
 	rm -fv $DESTDIR/dump_files.txt
+	
+	if [[ "x$1" == "x--keep-only-cache" ]]; then
+		msg "removing all temporary files. Only cache is kept"
+		rm -fv $DESTDIR/{dirs,files,packages.}.txt
+	fi
 		
 	ctan_info
 }
