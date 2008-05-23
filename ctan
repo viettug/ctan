@@ -132,7 +132,7 @@ ctan_update()
 
 	if [[ "x$1" == "x--keep-only-cache" ]]; then
 		msg "removing all temporary files. Only cache is kept"
-		rm -fv $DESTDIR/{dirs,files,packages.}.txt
+		rm -fv $DESTDIR/*.txt
 	fi
 		
 }
