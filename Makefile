@@ -1,7 +1,7 @@
 default:
 
 readme:
-	@sh ./ctan |sed -e 's/:: //g' > README
+	@sh ./ctan about |sed -e 's/:: //g' > README
 
 filelist:
 	@ls | grep -v "~" |grep -v ".zip" > FILELIST
