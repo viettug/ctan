@@ -2,15 +2,17 @@ USAGE
 
 	ctan about:	show all information about this tool
 	ctan usage:	show usage
+	ctan version:	show script version
 
-	ctan update :	update the package list (require lynx, wc, tar/bzip and internet connection).
-	ctan grep <string> :	search packages match <string>. grep ability is supported.
-	ctan get <string> :	download packages match <string> to working directory.
+	ctan update :	update using http://kyanh.net/ctan.tools//cache.tbz (450k)
+	ctan update --direct:	update directly from CTAN. You are going to download 15MB
+	ctan grep <string> :	search packages match <string>. grep ability is supported
+	ctan get <string> :	download packages match <string> to working directory
 
 	If you want to search for files:
 
 	ctan fgrep <string> :	search for files.
-	ctan fget <string> :	download files match <string> to working directory.
+	ctan fget <string> :	download files match <string> to working directory
 	ctan grep -file <string>
 	ctan get -file <string>
 
@@ -20,3 +22,9 @@ EXAMPLES
 	ctan grep ^n	# search for packages srated by 'n'
 	ctan get ^n	# download packages started by 'n'
 	ctan get -file contrib/ntheorem.zip
+	ctan fget contrib/ntheorem.zip
+
+	The results of '-file' option should be filtered
+
+	ctan fgrep ntheorem| grep zip
+
