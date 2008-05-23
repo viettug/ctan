@@ -1,43 +1,18 @@
-ABOUT
-
-	This small tool is used to seach/download some LaTeX packages that were listed in CTAN:
-		http://ctan.org/tex-archive/macros/latex/contrib/
-	or search/download for any files in
-		http://ctan.org/tex-archive/.
-
-	Since version 1.0.1, the tool will use the cache file
-		http://kyanh.net/ctan.tools//cache.tbz
-	This file contains the list of all files in CTAN. It's updated daily by a cron job hosted
-	by http://kyanh.net/. The size of file is about 500k.
-
-	The tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly.
-	Some linux distribution doesnot contains lynx by default and you must install lynx manually
-	before running this script.
-
-	So this tool requires a *nix-liked environment to work.
-
-	This tool was written by kyanh <xkyanh@gmail.com>
-	kyanh is a member of Vietnamese TeX Users Group <http://viettug.org>.
-	He wrote this script as he wanted a fast client to access CTAN.
-
-VERSION
-
-	1.0.0 2008/05/11: first version
-	1.1.0 2008/05/15: search for files (use cache file)
-	1.1.1 2008/05/15: fix bug (ctan_update)
-	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
-
 USAGE
 
-	ctan :	show all information about this tool
+	ctan about:	show all information about this tool
+	ctan usage:	show usage
+
 	ctan update :	update the package list (require lynx, wc, tar/bzip and internet connection).
 	ctan grep <string> :	search packages match <string>. grep ability is supported.
 	ctan get <string> :	download packages match <string> to working directory.
 
 	If you want to search for files:
 
-	ctan grep -file <string> :	search for files.
-	ctan get -file <string> :	download files match <string> to working directory.
+	ctan fgrep <string> :	search for files.
+	ctan fget <string> :	download files match <string> to working directory.
+	ctan grep -file <string>
+	ctan get -file <string>
 
 EXAMPLES
 
@@ -45,18 +20,3 @@ EXAMPLES
 	ctan grep ^n	# search for packages srated by 'n'
 	ctan get ^n	# download packages started by 'n'
 	ctan get -file contrib/ntheorem.zip
-
-TODO
-
-	* package information supported
-	* ability to select FTP mirror
-	* search by package description,...
-	* package build script
-
-LICENSE
-
-	This tool is published under LPPL.
-
-BUGS
-	Feel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome.
-
