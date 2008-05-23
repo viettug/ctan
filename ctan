@@ -62,10 +62,10 @@ ctan_update()
 		msg "uncompressing $DESTDIR/cache.tbz..."
 		tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
 
-		ctan_info
-
 		msg "removing {dirs,files,dump_files}.txt as it is too big..."
 		rm -fv $DESTDIR/{dump_files.txt,cache.tbz}
+
+		ctan_info
 
 		return 0
 	fi
@@ -127,13 +127,14 @@ ctan_update()
 
 	msg "removing dump_files.txt as it's too big..."
 	rm -fv $DESTDIR/dump_files.txt
-	
+
+	ctan_info
+
 	if [[ "x$1" == "x--keep-only-cache" ]]; then
 		msg "removing all temporary files. Only cache is kept"
 		rm -fv $DESTDIR/{dirs,files,packages.}.txt
 	fi
 		
-	ctan_info
 }
 
 ctan_search()
