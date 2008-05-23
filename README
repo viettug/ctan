@@ -24,7 +24,7 @@ EXAMPLES
 	ctan get -file contrib/ntheorem.zip
 	ctan fget contrib/ntheorem.zip
 
-	The results of '-file' option should be filtered
+	The result by '-file' option should be filtered
 
 	ctan fgrep ntheorem| grep zip
 
