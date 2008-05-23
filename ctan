@@ -37,7 +37,7 @@ ctan_check_all()
 
 ctan_info()
 {
-		msg "* Files updated: $DESTDIR/{files,contrib,packages,dirs}.txt"
+		msg
 		msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"		
 		msg "* `wc -l $DESTDIR/files.txt |gawk '{print $1}'` file(s) found"		
 }
