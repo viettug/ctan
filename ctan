@@ -127,7 +127,7 @@ ctan_update()
 
 ctan_search()
 {
-	[[ -f $DESTDIR/packages.txt ]] || ctan_update --first-time --use-cache
+	[[ -d $DESTDIR/ ]] || ctan_update --first-time --use-cache
 	if [[ "x$1" == "x-file" ]]; then
 		shift
 		grep $* $DESTDIR/files.txt | grep -v obsolete
@@ -135,7 +135,7 @@ ctan_search()
 		grep $* $DESTDIR/packages.txt | grep -v obsolete
 	fi	
 	if [[ $? -gt 0 ]]; then
-		msg "not package/file found"
+		msg "no package/file found"
 		return 1
 	fi
 }
@@ -144,7 +144,7 @@ ctan_get()
 {
 	ctan_search $* > $DESTDIR/tmp.txt
 	if [[ $? -gt 0 ]]; then
-		msg "not package matches '$*'"
+		msg "no package matches '$*'"
 		return
 	fi
 	if [[ "x$1" == "x-file" ]]; then
@@ -245,15 +245,17 @@ ctan_usage()
 	msg
 	msg "\tctan about:\tshow all information about this tool"
 	msg "\tctan usage:\tshow usage"
+	msg "\tctan version:\tshow script version"
 	msg
-	msg "\tctan update :\tupdate the package list (require lynx, wc, tar/bzip and internet connection)."
-	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported."
-	msg "\tctan get <string> :\tdownload packages match <string> to working directory."
+	msg "\tctan update :\tupdate using $KYANHNET_REPOS/cache.tbz (450k)"
+	msg "\tctan update --direct:\tupdate directly from CTAN. You are going to download 15MB"
+	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported"
+	msg "\tctan get <string> :\tdownload packages match <string> to working directory"
 	msg
 	msg "\tIf you want to search for files:"
 	msg
 	msg "\tctan fgrep <string> :\tsearch for files."
-	msg "\tctan fget <string> :\tdownload files match <string> to working directory."
+	msg "\tctan fget <string> :\tdownload files match <string> to working directory"
 	msg "\tctan grep -file <string>"
 	msg "\tctan get -file <string>"
 	msg
@@ -263,6 +265,12 @@ ctan_usage()
 	msg "\tctan grep ^n\t# search for packages srated by 'n'"
 	msg "\tctan get ^n\t# download packages started by 'n'"
 	msg "\tctan get -file contrib/ntheorem.zip"
+	msg "\tctan fget contrib/ntheorem.zip"
+	msg
+	msg	"\tThe results of '-file' option should be filtered"
+	msg
+	msg "\tctan fgrep ntheorem| grep zip"
+	msg 	
 }
 
 ctan_arg()
