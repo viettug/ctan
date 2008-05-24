@@ -34,7 +34,7 @@ ctan_check()
 
 ctan_check_all()
 {
-	msg "checking dependencies..."
+	# msg "checking dependencies..."
 	ERROR=0
 	for tool in $TOOLS; do
 		ctan_check $tool
@@ -44,14 +44,14 @@ ctan_check_all()
 		exit 1
 	fi
 
-	msg "found $TOOLS"
+	# msg "found $TOOLS"
 
 	# optional packages
 
 	ctan_check lzma
 	if [[ $? == 0 ]]; then
 		HAVE_LZMA=1
-		msg "found lzma"
+		# msg "found lzma"
 	fi
 	
 	return 0
@@ -89,7 +89,7 @@ ctan_update()
 			wget $KYANHNET_REPOS/cache.tlzma -O $DESTDIR/cache.tlzma
 
 			msg "uncompressing $DESTDIR/cache.tlzma..."
-			tar --use-compress-program lzma xfv $DESTDIR/cache.tlzma -C $DESTDIR
+			tar xvf $DESTDIR/cache.tlzma --use-compress-program lzma -C $DESTDIR
 		else
 			msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
 			wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
