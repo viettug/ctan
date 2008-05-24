@@ -5,7 +5,7 @@ ABOUT
 	or search/download any files in
 		http://ctan.org/tex-archive/.
 
-	Since version 1.0.1 the tool use the cache file
+	Since version 1.0.1 the tool uses the cache file
 		http://kyanh.net/ctan.tools//cache.tbz
 	This file contains the list of all files in CTAN. It's updated daily by a cron job hosted
 	by http://kyanh.net/. The size of file is about 400k.

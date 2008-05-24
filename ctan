@@ -253,7 +253,7 @@ ctan_about()
 	msg "\tor search/download any files in"
 	msg "\t\t$CTAN_ARCHIVE/."
 	msg ""
-	msg "\tSince version 1.0.1 the tool use the cache file"
+	msg "\tSince version 1.0.1 the tool uses the cache file"
 	msg "\t\t$KYANHNET_REPOS/cache.tbz"
 	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
 	msg "\tby http://kyanh.net/. The size of file is about 400k."
