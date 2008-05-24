@@ -2,19 +2,18 @@ ABOUT
 
 	This small tool is used to seach/download some LaTeX packages that were listed in CTAN:
 		http://ctan.org/tex-archive/macros/latex/contrib/
-	or search/download for any files in
+	or search/download any files in
 		http://ctan.org/tex-archive/.
 
-	Since version 1.0.1, the tool will use the cache file
+	Since version 1.0.1 the tool use the cache file
 		http://kyanh.net/ctan.tools//cache.tbz
 	This file contains the list of all files in CTAN. It's updated daily by a cron job hosted
 	by http://kyanh.net/. The size of file is about 400k.
 
 	The tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly.
-	Some linux distribution doesnot contains lynx by default and you must install lynx manually
-	before running this script.
-
-	So this tool requires a *nix-liked environment to work.
+	Some linux distributions donot contains lynx by default and you must install lynx manually
+	before running this script. So this tool requires a *nix-liked environment to work.
+	texer <VietTUG> tested and reported that the tools worked fine in Cygwin environment.
 
 	This tool was written by kyanh <xkyanh@gmail.com>
 	kyanh is a member of Vietnamese TeX Users Group <http://viettug.org>.
@@ -23,40 +22,41 @@ ABOUT
 VERSION
 
 	1.0.0 2008/05/11: first version
-	1.1.0 2008/05/15: search for files (use cache file)
+	1.1.0 2008/05/15: search files (use cache file)
 	1.1.1 2008/05/15: fix bug (ctan_update)
 	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
 	1.3.0 2008/05/13: everything is cached. Faster. New options. Thanks to texer at VietTUG
+	1.3.1 2008/05/24: fix typo. lzma support
 
 USAGE
 
-	ctan about:	show all information about this tool
-	ctan usage:	show usage
-	ctan version:	show script version
+	ctan about :	show all information about this tool
+	ctan usage :	show usage
+	ctan version :	show script version
 
 	ctan update :	update using http://kyanh.net/ctan.tools//cache.tbz (450k)
-	ctan update --direct:	update directly from CTAN. You are going to download 15MB
+	ctan update --direct :	update directly from CTAN. You are going to download 15MB
 	ctan grep <string> :	search packages match <string>. grep ability is supported
 	ctan get <string> :	download packages match <string> to working directory
 
-	If you want to search for files:
+	If you want to search files:
 
-	ctan fgrep <string> :	search for files.
+	ctan fgrep <string> :	search files.
 	ctan fget <string> :	download files match <string> to working directory
 	ctan grep -file <string>
 	ctan get -file <string>
 
 EXAMPLES
 
-	ctan grep theorem	# search for packages match 'theorem'
-	ctan grep ^n	# search for packages srated by 'n'
+	ctan grep theorem	# search packages match 'theorem'
+	ctan grep ^n	# search packages srated by 'n'
 	ctan get ^n	# download packages started by 'n'
 	ctan get -file contrib/ntheorem.zip
 	ctan fget contrib/ntheorem.zip
 
 	The result by '-file' option should be filtered
 
-	ctan fgrep ntheorem| grep zip
+	ctan fgrep ntheorem | grep zip
 
 
 TODO
@@ -76,5 +76,5 @@ LICENSE
 	This tool is published under LPPL.
 
 BUGS
-	Feel free to contact kyanh <xkyanh@gmail.com>. All feedback are welcome.
+	Please report to kyanh <xkyanh@gmail.com>.
 
