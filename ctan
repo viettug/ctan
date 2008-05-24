@@ -159,10 +159,13 @@ ctan_update()
 
 	msg "compressing the results..."
 	cd $DESTDIR
+	
+	msg "creating tbz archive..."
 	tar -cvj -f .cache.tbz {dirs,files,packages}.txt
 	mv .cache.tbz cache.tbz
 	
 	if [[ $HAVE_LZMA == 1 ]]; then
+		msg "creating lzma archive..."
 		tar -cv --use-compress-program lzma -f .cache.tlzma {dirs,files,packages}.txt
 		mv .cache.tlzma cache.tlzma
 	fi
