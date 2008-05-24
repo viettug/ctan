@@ -11,13 +11,12 @@ ABOUT
 	by http://kyanh.net/. The size of file is about 400k.
 
 	The tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly.
-	Some linux distributions donot contains lynx by default and you must install lynx manually
+	Some linux distributions donot contain lynx by default and you must install lynx manually
 	before running this script. So this tool requires a *nix-liked environment to work.
-	texer <VietTUG> tested and reported that the tools worked fine in Cygwin environment.
+	texer <VietTUG> tested and reported that the tool worked fine in Cygwin environment.
 
 	This tool was written by kyanh <xkyanh@gmail.com>
 	kyanh is a member of Vietnamese TeX Users Group <http://viettug.org>.
-	He wrote this script as he wanted a fast client to access CTAN.
 
 VERSION
 
