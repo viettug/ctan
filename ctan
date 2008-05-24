@@ -84,14 +84,22 @@ ctan_update()
 		shift
 		msg "update by using cache file..."
 
-		msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
-		wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
+		if [[ $HAVE_LZMA == 1 ]]; then
+			msg "getting $KYANHNET_REPOS/ctan.tools/cache.tlzma..."
+			wget $KYANHNET_REPOS/cache.tlzma -O $DESTDIR/cache.tlzma
 
-		msg "uncompressing $DESTDIR/cache.tbz..."
-		tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
+			msg "uncompressing $DESTDIR/cache.tlzma..."
+			tar --use-compress-program lzma xfv $DESTDIR/cache.tlzma -C $DESTDIR
+		else
+			msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
+			wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
+
+			msg "uncompressing $DESTDIR/cache.tbz..."
+			tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
+		fi
 
 		msg "removing {dirs,files,dump_files}.txt as it is too big..."
-		rm -fv $DESTDIR/{dump_files.txt,cache.tbz}
+		rm -fv $DESTDIR/{dump_files.txt,cache.tbz,cache.tlzma}
 
 		ctan_info
 
@@ -121,7 +129,7 @@ ctan_update()
 
 	# create list of files #######################################################
 
-	msg "searching for all files..."
+	msg "searching all files..."
 
 	lynx -dump 'http://ctan.org/cgi-bin/filenameSearch.py?filename=.' \
 		> $DESTDIR/dump_files.txt
