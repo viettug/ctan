@@ -25,7 +25,7 @@ VERSION
 	1.1.0 2008/05/15: search files (use cache file)
 	1.1.1 2008/05/15: fix bug (ctan_update)
 	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
-	1.3.0 2008/05/13: everything is cached. Faster. New options. Thanks to texer at VietTUG
+	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG
 	1.3.1 2008/05/24: fix typo. lzma support
 
 USAGE
