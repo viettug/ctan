@@ -6,7 +6,7 @@ export PATH=$PATH:$HOME/bin
 
 CTAN_ARCHIVE=http://ctan.org/tex-archive
 CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/
-KYANHNET_REPOS=http://kyanh.net/ctan.tools/
+KYANHNET_REPOS=http://viettug.org/ctan.tools/
 DESTDIR=$HOME/.ctan/
 TOOLS="lynx wget tar bzip2 sed sort gawk"
 HAVE_LZMA=0
@@ -89,7 +89,7 @@ ctan_update()
 			wget $KYANHNET_REPOS/cache.tlzma -O $DESTDIR/cache.tlzma
 
 			msg "uncompressing $DESTDIR/cache.tlzma..."
-			tar xvf $DESTDIR/cache.tlzma --use-compress-program lzma -C $DESTDIR
+			lzma d $DESTDIR/cache.tlzma -so | tar xvf - -C $DESTDIR
 		else
 			msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
 			wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
