@@ -12,7 +12,7 @@ distro:
 	@zip -9r ctan_tools.zip ../ctan.tools/ -x "*svn*" -x "*~"
 
 install:
-	@install -v -m 750 ./ctan ~/bin
+	@install -v -m 750 ./ctan $(HOME)/bin
 
 all: readme filelist distro
 
