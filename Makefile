@@ -20,4 +20,4 @@ upload:
 	@echo "* update remote script"
 	@echo "* update blog"
 	@echo "* update viettug repository"
-
+	@site5.up -d bin ctan
