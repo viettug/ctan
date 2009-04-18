@@ -89,10 +89,10 @@ ctan_update()
 			wget $KYANHNET_REPOS/cache.tlzma -O $DESTDIR/cache.tlzma
 
 			msg "uncompressing $DESTDIR/cache.tlzma..."
-			if [ "x`uname -s`" == "xLinux"]; then
-				lzma d $DESTDIR/cache.tlzma -so | tar xvf - -C $DESTDIR
-			else
+			if [[ "x`uname -s`" == "xLinux" ]]; then
 				lzma d $DESTDIR/cache.tlzma -c | tar xvf - -C $DESTDIR
+			else # nix system
+				lzma d $DESTDIR/cache.tlzma -so | tar xvf - -C $DESTDIR
 			fi
 		else
 			msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
