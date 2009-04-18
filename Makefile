@@ -6,7 +6,7 @@ readme:
 filelist:
 	@ls | grep -v "~" |grep -v ".zip" > FILELIST
 
-distro:
+distro: readme filelist
 	@chmod +x ./ctan
 	@rm -fv ctan_tools.zip
 	@zip -9r ctan_tools.zip ../ctan.tools/ -x "*svn*" -x "*~"

@@ -260,7 +260,7 @@ ctan_about()
 	msg "\tSince version 1.0.1 the tool uses the cache file"
 	msg "\t\t$KYANHNET_REPOS/cache.tbz"
 	msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
-	msg "\tby http://kyanh.net/. The size of file is about 400k."
+	msg "\tby http://viettug.org/. The size of file is about 400k."
 	msg
 	msg "\tThe tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly."
 	msg "\tSome linux distributions donot contain lynx by default and you must install lynx manually"
@@ -272,12 +272,13 @@ ctan_about()
 	msg
 	msg "VERSION"
 	msg
-	msg	"\t1.0.0 2008/05/11: first version"
-	msg	"\t1.1.0 2008/05/15: search files (use cache file)"
-	msg	"\t1.1.1 2008/05/15: fix bug (ctan_update)"
+	msg "\t1.0.0 2008/05/11: first version"
+	msg "\t1.1.0 2008/05/15: search files (use cache file)"
+	msg "\t1.1.1 2008/05/15: fix bug (ctan_update)"
 	msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
 	msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG"
 	msg "\t1.3.1 2008/05/24: fix typo. lzma support"
+	msg "\t1.3.2 2009/04/18: lzma option fixed"
 	msg
 	ctan_usage
 	msg
