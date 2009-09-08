@@ -275,6 +275,7 @@ ctan_about()
 	msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG"
 	msg "\t1.3.1 2008/05/24: fix typo. lzma support"
 	msg "\t1.3.2 2009/04/18: lzma option fixed"
+	msg "\t1.3.3 2009/09/08: lzma problem fixed" 
 	msg
 	ctan_usage
 	msg
@@ -304,33 +305,32 @@ ctan_usage()
 {
 	msg "USAGE"
 	msg
-	msg "\tctan about :\tshow all information about this tool"
-	msg "\tctan usage :\tshow usage"
-	msg "\tctan version :\tshow script version"
+	msg "\tctan about           : show all information about this tool"
+	msg "\tctan usage           : show usage"
+	msg "\tctan version         : show script version"
 	msg
-	msg "\tctan update :\tupdate using $KYANHNET_REPOS/cache.tbz (450k)"
-	msg "\tctan update --direct :\tupdate directly from CTAN. You are going to download 15MB"
-	msg "\tctan grep <string> :\tsearch packages match <string>. grep ability is supported"
-	msg "\tctan get <string> :\tdownload packages match <string> to working directory"
+	msg "\tctan update          : update using $KYANHNET_REPOS/cache.tbz (450k)"
+	msg "\tctan update --direct : update directly from CTAN. You are going to download 15MB"
+	msg "\tctan grep <string>   : search packages match <string>. grep ability is supported"
+	msg "\tctan get  <string>   : download packages match <string> to working directory"
 	msg
 	msg "\tIf you want to search files:"
 	msg
-	msg "\tctan fgrep <string> :\tsearch files."
-	msg "\tctan fget <string> :\tdownload files match <string> to working directory"
+	msg "\tctan fgrep <string>  : search files."
+	msg "\tctan fget  <string>  : download files match <string> to working directory"
 	msg "\tctan grep -file <string>"
-	msg "\tctan get -file <string>"
+	msg "\tctan get  -file <string>"
 	msg
 	msg "EXAMPLES"
 	msg
-	msg "\tctan grep theorem\t# search packages match 'theorem'"
-	msg "\tctan grep ^n\t# search packages srated by 'n'"
-	msg "\tctan get ^n\t# download packages started by 'n'"
+	msg "\tctan grep theorem    # search packages match 'theorem'"
+	msg "\tctan grep ^n         # search packages srated by 'n'"
+	msg "\tctan get ^n          # download packages started by 'n'"
 	msg "\tctan get -file contrib/ntheorem.zip"
-	msg "\tctan fget contrib/ntheorem.zip"
+	msg "\tctan fget      contrib/ntheorem.zip"
 	msg
-	msg	"\tThe result by '-file' option should be filtered"
-	msg
-	msg "\tctan fgrep ntheorem | grep zip"
+	msg "\tThe results by '-file' option may be filtered, for e.g.,"
+	msg "\t\tctan fgrep ntheorem | grep zip"
 	msg 	
 }
 
