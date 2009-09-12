@@ -360,7 +360,7 @@ ctan_usage()
   msg
   msg "\tctan grep theorem    # search packages match 'theorem'"
   msg "\tctan grep ^n         # search packages srated by 'n'"
-  msg "\tctan get ^n          # download packages started by 'n'"
+  msg "\tctan get  ^n         # download packages started by 'n'"
   msg ""
   msg "\tctan get -file contrib/ntheorem.zip"
   msg "\tctan fget      contrib/ntheorem.zip"

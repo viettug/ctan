@@ -48,7 +48,7 @@ EXAMPLES
 
 	ctan grep theorem    # search packages match 'theorem'
 	ctan grep ^n         # search packages srated by 'n'
-	ctan get ^n          # download packages started by 'n'
+	ctan get  ^n         # download packages started by 'n'
 
 	ctan get -file contrib/ntheorem.zip
 	ctan fget      contrib/ntheorem.zip
