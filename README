@@ -27,36 +27,36 @@ VERSION
 	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG
 	1.3.1 2008/05/24: fix typo. lzma support
 	1.3.2 2009/04/18: lzma option fixed
+	1.3.3 2009/09/08: lzma problem fixed
 
 USAGE
 
-	ctan about :	show all information about this tool
-	ctan usage :	show usage
-	ctan version :	show script version
+	ctan about           : show all information about this tool
+	ctan usage           : show usage
+	ctan version         : show script version
 
-	ctan update :	update using http://viettug.org/ctan.tools//cache.tbz (450k)
-	ctan update --direct :	update directly from CTAN. You are going to download 15MB
-	ctan grep <string> :	search packages match <string>. grep ability is supported
-	ctan get <string> :	download packages match <string> to working directory
+	ctan update          : update using http://viettug.org/ctan.tools//cache.tbz (450k)
+	ctan update --direct : update directly from CTAN. You are going to download 15MB
+	ctan grep <string>   : search packages match <string>. grep ability is supported
+	ctan get  <string>   : download packages match <string> to working directory
 
 	If you want to search files:
 
-	ctan fgrep <string> :	search files.
-	ctan fget <string> :	download files match <string> to working directory
+	ctan fgrep <string>  : search files.
+	ctan fget  <string>  : download files match <string> to working directory
 	ctan grep -file <string>
-	ctan get -file <string>
+	ctan get  -file <string>
 
 EXAMPLES
 
-	ctan grep theorem	# search packages match 'theorem'
-	ctan grep ^n	# search packages srated by 'n'
-	ctan get ^n	# download packages started by 'n'
+	ctan grep theorem    # search packages match 'theorem'
+	ctan grep ^n         # search packages srated by 'n'
+	ctan get ^n          # download packages started by 'n'
 	ctan get -file contrib/ntheorem.zip
-	ctan fget contrib/ntheorem.zip
+	ctan fget      contrib/ntheorem.zip
 
-	The result by '-file' option should be filtered
-
-	ctan fgrep ntheorem | grep zip
+	The results by '-file' option may be filtered, for e.g.,
+		ctan fgrep ntheorem | grep zip
 
 
 TODO
