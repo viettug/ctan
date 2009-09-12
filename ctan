@@ -286,23 +286,19 @@ ctan_about()
 {
   msg "ABOUT"
   msg
-  msg "\tThis small tool is used to seach/download some LaTeX packages that were listed in CTAN:"
-  msg "\t\t$CTAN_CONTRIB"
-  msg "\tor search/download any files in"
-  msg "\t\t$CTAN_ARCHIVE/."
+  msg "\tThis small tool is used to seach/download some LaTeX packages that were listed in"
+  msg "\t\t$CTAN_CONTRIB (or its mirror)"
+  msg "\tor search/download any files in $CTAN_ARCHIVE"
   msg ""
-  msg "\tSince version 1.0.1 the tool uses the cache file"
-  msg "\t\t$KYANHNET_REPOS/cache.tbz"
-  msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job hosted"
-  msg "\tby http://viettug.org/. The size of file is about 400k."
+  msg "\tSince version 1.0.1 this tool uses the cache $KYANHNET_REPOS/cache.tbz."
+  msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job"
+  msg "\thosted by VietTUG <http://viettug.org/>. The size of file is about 400k."
   msg
-  msg "\tThe tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly."
-  msg "\tSome linux distributions donot contain lynx by default and you must install lynx manually"
-  msg "\tbefore running this script. So this tool requires a *nix-liked environment to work."
-  msg "\ttexer <VietTUG> tested and reported that the tool worked fine in Cygwin environment."
+  msg "\tThe tool requires following tools to work correctly"
+  msg "\t\t$TOOLS"
+  msg "\tSome linux distributions require that you install lynx manually."
   msg
-  msg "\tThis tool was written by kyanh <xkyanh@gmail.com>"
-  msg "\tkyanh is a member of Vietnamese TeX Users Group <http://viettug.org>."
+  msg "\tThis tool was written by Anh K. Huynh <xkyanh@gmail.com>"
   msg
   msg "VERSION"
   msg
@@ -310,24 +306,25 @@ ctan_about()
   msg "\t1.1.0 2008/05/15: search files (use cache file)"
   msg "\t1.1.1 2008/05/15: fix bug (ctan_update)"
   msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
-  msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG"
+  msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer."
   msg "\t1.3.1 2008/05/24: fix typo. lzma support"
   msg "\t1.3.2 2009/04/18: lzma option fixed"
   msg "\t1.3.3 2009/09/08: lzma problem fixed" 
+  msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)" 
   msg
   ctan_usage
   msg
   msg "TODO"
   msg
   msg "\t* package information supported"
-  msg "\t* ability to select FTP mirror"
   msg "\t* search by package description,..."
   msg "\t* package build script"
   msg
-  msg "THANKS"
+  msg "THANKS to"
   msg
   msg "\t* Karl Berry <karl@freefriends.org>"
   msg "\t* Nguyen Van Hanh <hanhnguyenvan@gmail.com>"
+  msg "\t* Jim Hefferon <ftpmaint@alan.smcvt.edu>"
   msg
   msg "LICENSE"
   msg
@@ -364,11 +361,10 @@ ctan_usage()
   msg "\tctan grep theorem    # search packages match 'theorem'"
   msg "\tctan grep ^n         # search packages srated by 'n'"
   msg "\tctan get ^n          # download packages started by 'n'"
+  msg ""
   msg "\tctan get -file contrib/ntheorem.zip"
   msg "\tctan fget      contrib/ntheorem.zip"
-  msg
-  msg "\tThe results by '-file' option may be filtered, for e.g.,"
-  msg "\t\tctan fgrep ntheorem | grep zip"
+  msg "\tctan fgrep     ntheorem | grep zip"
   msg   
 }
 

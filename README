@@ -1,22 +1,18 @@
 ABOUT
 
-	This small tool is used to seach/download some LaTeX packages that were listed in CTAN:
-		http://ctan.org/tex-archive/macros/latex/contrib/
-	or search/download any files in
-		http://ctan.org/tex-archive/.
+	This small tool is used to seach/download some LaTeX packages that were listed in
+		http://ctan.org/tex-archive/macros/latex/contrib/ (or its mirror)
+	or search/download any files in http://ctan.org/tex-archive
 
-	Since version 1.0.1 the tool uses the cache file
-		http://viettug.org/ctan.tools//cache.tbz
-	This file contains the list of all files in CTAN. It's updated daily by a cron job hosted
-	by http://viettug.org/. The size of file is about 400k.
+	Since version 1.0.1 this tool uses the cache http://viettug.org/ctan.tools//cache.tbz.
+	This file contains the list of all files in CTAN. It's updated daily by a cron job
+	hosted by VietTUG <http://viettug.org/>. The size of file is about 400k.
 
-	The tool requires wget, lynx, gawk, wc, tar/bzip and sed program to run correctly.
-	Some linux distributions donot contain lynx by default and you must install lynx manually
-	before running this script. So this tool requires a *nix-liked environment to work.
-	texer <VietTUG> tested and reported that the tool worked fine in Cygwin environment.
+	The tool requires following tools to work correctly
+		lynx wget tar bzip2 sed sort gawk grep
+	Some linux distributions require that you install lynx manually.
 
-	This tool was written by kyanh <xkyanh@gmail.com>
-	kyanh is a member of Vietnamese TeX Users Group <http://viettug.org>.
+	This tool was written by Anh K. Huynh <xkyanh@gmail.com>
 
 VERSION
 
@@ -24,10 +20,11 @@ VERSION
 	1.1.0 2008/05/15: search files (use cache file)
 	1.1.1 2008/05/15: fix bug (ctan_update)
 	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
-	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer at VietTUG
+	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer.
 	1.3.1 2008/05/24: fix typo. lzma support
 	1.3.2 2009/04/18: lzma option fixed
 	1.3.3 2009/09/08: lzma problem fixed
+	1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)
 
 USAGE
 
@@ -52,24 +49,23 @@ EXAMPLES
 	ctan grep theorem    # search packages match 'theorem'
 	ctan grep ^n         # search packages srated by 'n'
 	ctan get ^n          # download packages started by 'n'
+
 	ctan get -file contrib/ntheorem.zip
 	ctan fget      contrib/ntheorem.zip
-
-	The results by '-file' option may be filtered, for e.g.,
-		ctan fgrep ntheorem | grep zip
+	ctan fgrep     ntheorem | grep zip
 
 
 TODO
 
 	* package information supported
-	* ability to select FTP mirror
 	* search by package description,...
 	* package build script
 
-THANKS
+THANKS to
 
 	* Karl Berry <karl@freefriends.org>
 	* Nguyen Van Hanh <hanhnguyenvan@gmail.com>
+	* Jim Hefferon <ftpmaint@alan.smcvt.edu>
 
 LICENSE
 
