@@ -6,4 +6,6 @@ README
 SCRIPT
 ctan
 ctan_dump_files
-search.txt
+index.html
+index.html.1
+ls-lR

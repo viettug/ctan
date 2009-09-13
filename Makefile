@@ -1,15 +1,18 @@
+FILES=ctan README
 default:
 
 readme: install
 	@ctan about |sed -e 's/:: //g' > README
 
 filelist:
-	@ls | grep -v "~" |grep -v ".zip" > FILELIST
+	@echo do nothing
 
 distro: readme filelist
 	@chmod +x ./ctan
 	@rm -fv ctan_tools.zip
-	@zip -9r ctan_tools.zip ../ctan.tools/ -x "*svn*" -x "*~"
+	@mkdir -pv ctan_tools
+	@cp $(FILES) ctan_tools
+	@zip -9r ctan_tools.zip ctan_tools
 
 install:
 	@install -v -m 750 ./ctan $(HOME)/bin
