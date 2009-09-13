@@ -71,7 +71,7 @@ ctan_mirror_select() {
   src="$1"
   msg "found $src"
   while true; do
-    location="`wget --max-redirect=0 $src 2>&1 1>/dev/null | grep Location: 2>/dev/null`"
+    location="`wget --max-redirect=0 $src -O - 2>&1 1>/dev/null| grep Location: 2>/dev/null`"
     if [ $? -eq 0 ]; then
       src="`echo $location | cut -d' ' -f2`"
       msg "found $src"
@@ -79,13 +79,10 @@ ctan_mirror_select() {
       break
     fi
   done
-  wget $src 1>/dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    CTAN_ARCHIVE="$src"
-    CTAN_CONTRIB="$CTAN_ARCHIVE/macros/latex/contrib/"
-    CTAN_FILES="$CTAN_ARCHIVE/FILES.byname"
-    msg "mirror detected: $CTAN_ARCHIVE"
-  fi
+  CTAN_ARCHIVE="$src"
+  CTAN_CONTRIB="$CTAN_ARCHIVE/macros/latex/contrib/"
+  CTAN_FILES="$CTAN_ARCHIVE/FILES.byname"
+  msg "mirror detected: $CTAN_ARCHIVE"
 }
 
 # show information after update
