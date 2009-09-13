@@ -147,23 +147,20 @@ ctan_update()
   ctan_mirror_select $CTAN_MIRROR
 
   msg "searching all files. please wait as this is a heavy task"
-  # lynx -dump $CTAN_FILES > $DESTDIR/dump_files.txt
-  cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/dump_files.txt
+  lynx -dump $CTAN_FILES > $DESTDIR/files.txt
+  #cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/dump_files.txt
   if [ $? -gt 0 ]; then
     msg "failed to download from CTAN. exit 1"
-    rm -fv $DESTDIR/dump_files.txt
+    rm -fv $DESTDIR/files.txt
     exit 1
   fi
 
-  msg "creating list of files..."
-  cat $DESTDIR/dump_files.txt > $DESTDIR/files.txt
-
   msg "getting list of LaTeX packages..."
-  grep -E "| macros/latex/contrib" $DESTDIR/files.txt \
+  grep '| macros/latex/contrib' $DESTDIR/files.txt \
     |grep -v 'info/' \
     |grep -E '\.(zip|sty|dtx)' \
     |sed -e 's#/[^/]*$##g' \
-    |sed -e 's#macros/latex/contrib/##g' \
+    |sed -e 's#| macros/latex/contrib/#| #g' \
     |sort -uk5 \
     > $DESTDIR/packages.txt
 
@@ -171,17 +168,14 @@ ctan_update()
   cd $DESTDIR
   
   msg "creating tbz archive..."
-  #tar -cvj -f .cache.tbz {files,packages}.txt
+  tar -cvj -f .cache.tbz {files,packages}.txt
   mv .cache.tbz cache.tbz
   
   if [ $HAVE_LZMA = 1 ]; then
     msg "creating lzma archive..."
-    # tar -cv --use-compress-program lzma -f .cache.tlzma {files,packages}.txt
+    tar -cv --use-compress-program lzma -f .cache.tlzma {files,packages}.txt
     mv .cache.tlzma cache.tlzma
   fi
-
-  msg "removing dump_files.txt as it's too big..."
-  rm -fv $DESTDIR/dump_files.txt
 
   ctan_info
 
@@ -283,6 +277,7 @@ ctan_about()
   msg "\t1.3.2 2009/04/18: lzma option fixed"
   msg "\t1.3.3 2009/09/08: lzma problem fixed" 
   msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)" 
+  msg "\t1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname" 
   msg
   ctan_usage
   msg
