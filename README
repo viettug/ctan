@@ -1,29 +1,20 @@
 ABOUT
 
-	This small tool is used to seach/download some LaTeX packages that were listed in
-		http://ctan.org/tex-archive/macros/latex/contrib/ (or its mirror)
-	or search/download any files in http://ctan.org/tex-archive
+	This jifty tool helps you to seach/download LaTeX packages listed at
+		http://ctan.org/tex-archive/macros/latex/contrib/
+	or search/download any files in http://ctan.org/tex-archive (or its mirror).
 
-	Since version 1.0.1 this tool uses the cache http://viettug.org/ctan.tools//cache.tbz.
-	This file contains the list of all files in CTAN. It's updated daily by a cron job
-	hosted by VietTUG <http://viettug.org/>. The size of file is about 400k.
-
-	The tool requires following tools to work correctly
+	The tool requires following programs
 		lynx wget tar bzip2 sed sort awk grep
-	Some linux distributions require that you install lynx manually.
 
-	This tool was written by Anh K. Huynh <xkyanh@gmail.com>
+	This tool was written by Anh K. Huynh <xkyanh@gmail.com>.
 
 VERSION
 
 	1.0.0 2008/05/11: first version
 	1.1.0 2008/05/15: search files (use cache file)
-	1.1.1 2008/05/15: fix bug (ctan_update)
 	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
 	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer.
-	1.3.1 2008/05/24: fix typo. lzma support
-	1.3.2 2009/04/18: lzma option fixed
-	1.3.3 2009/09/08: lzma problem fixed
 	1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)
 	1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname
 
@@ -33,7 +24,7 @@ USAGE
 	ctan usage           : show usage
 	ctan version         : show script version
 
-	ctan update          : update using http://viettug.org/ctan.tools//cache.tbz (450k)
+	ctan update          : update using http://viettug.org/ctan.tools//cache.tbz (~1MB)
 	ctan update --direct : update directly from CTAN. You are going to download 8MB
 	ctan grep <string>   : search packages match <string>. grep ability is supported
 	ctan get  <string>   : download packages match <string> to working directory
