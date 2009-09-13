@@ -1,5 +1,4 @@
 ABOUT
-
 	This jifty tool helps you to seach/download LaTeX packages listed at
 		http://ctan.org/tex-archive/macros/latex/contrib/
 	or search/download any files in http://ctan.org/tex-archive (or its mirror).
@@ -8,18 +7,14 @@ ABOUT
 		lynx wget tar bzip2 sed sort awk grep
 
 	This tool was written by Anh K. Huynh <xkyanh@gmail.com>.
-
 VERSION
-
 	1.0.0 2008/05/11: first version
 	1.1.0 2008/05/15: search files (use cache file)
 	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
 	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer.
 	1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)
 	1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname
-
 USAGE
-
 	ctan about           : show all information about this tool
 	ctan usage           : show usage
 	ctan version         : show script version
@@ -35,9 +30,7 @@ USAGE
 	ctan fget  <string>  : download files match <string> to working directory
 	ctan grep -file <string>
 	ctan get  -file <string>
-
 EXAMPLES
-
 	ctan grep theorem    # search packages match 'theorem'
 	ctan grep ^n         # search packages srated by 'n'
 	ctan get  ^n         # download packages started by 'n'
@@ -45,24 +38,15 @@ EXAMPLES
 	ctan get -file contrib/ntheorem.zip
 	ctan fget      contrib/ntheorem.zip
 	ctan fgrep     ntheorem | grep zip
-
-
 TODO
-
 	* package information supported
 	* search by package description,...
 	* package build script
-
 THANKS to
-
 	* Karl Berry <karl@freefriends.org>
 	* Nguyen Van Hanh <hanhnguyenvan@gmail.com>
 	* Jim Hefferon <ftpmaint@alan.smcvt.edu>
-
 LICENSE
-
 	This tool is published under LPPL.
-
 BUGS
 	Please report to kyanh <xkyanh@gmail.com>.
-
