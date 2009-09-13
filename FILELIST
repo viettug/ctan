@@ -1,7 +1,9 @@
 FILELIST
+FILES.byname
 INSTALL
 Makefile
 README
 SCRIPT
 ctan
 ctan_dump_files
+search.txt

@@ -7,17 +7,18 @@
 # Homepage    : CTAN:/contrib/ctan.tools
 # Document    : self documented, try `$0 about`
 # Requirements: bash, lynx, wget, tar, bzip2,
-#               sed, sort, gawk, (e)grep, cut
+#               sed, sort, awk, (e)grep, cut
 # TODO        : fancy get options (code/interface)
 
 export PATH=$PATH:$HOME/bin
 
 CTAN_MIRROR=http://mirror.ctan.org/
-CTAN_ARCHIVE=http://ctan.org/tex-archive
-CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/
-KYANHNET_REPOS=http://viettug.org/ctan.tools/
+CTAN_ARCHIVE=http://ctan.org/tex-archive          # to be updated
+CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/  # to be updated
+CTAN_FILES=$CTAN_ARCHIVE/FILES.byname             # to be updated
+VIETTUG_CACHEDIR=http://viettug.org/ctan.tools/
 DESTDIR=$HOME/.ctan/
-TOOLS="lynx wget tar bzip2 sed sort gawk grep"
+TOOLS="lynx wget tar bzip2 sed sort awk grep"
 HAVE_LZMA=0
 
 # functions
@@ -32,7 +33,7 @@ msg()
 ctan_check()
 {
   type $1 2>/dev/null 1>&2
-  if [[ $? -gt 0 ]]; then
+  if [ $? -gt 0 ]; then
     ERROR=1
     msg "not found '$1'"
     return 1
@@ -48,19 +49,14 @@ ctan_check_all()
   for tool in $TOOLS; do
     ctan_check $tool
   done
-  if [[ $ERROR == 1 ]]; then
+  if [ $ERROR = 1 ]; then
     msg "error occured. exit 1"
     exit 1
   fi
 
-  # msg "found $TOOLS"
-
-  # optional packages
-
   ctan_check lzma
-  if [[ $? == 0 ]]; then
+  if [ $? = 0 ]; then
     HAVE_LZMA=1
-    # msg "found lzma"
   fi
   
   return 0
@@ -86,7 +82,8 @@ ctan_mirror_select() {
   if [ $? -eq 0 ]; then
     CTAN_ARCHIVE="$src"
     CTAN_CONTRIB="$CTAN_ARCHIVE/macros/latex/contrib/"
-    msg "Mirror detected: $CTAN_ARCHIVE"
+    CTAN_FILES="$CTAN_ARCHIVE/FILES.byname"
+    msg "mirror detected: $CTAN_ARCHIVE"
   fi
 }
 
@@ -95,15 +92,15 @@ ctan_mirror_select() {
 ctan_info()
 {
     msg
-    msg "* `wc -l $DESTDIR/packages.txt |gawk '{print $1}'` package(s) found"   
-    msg "* `wc -l $DESTDIR/files.txt |gawk '{print $1}'` file(s) found"   
+    msg "* `wc -l $DESTDIR/packages.txt |awk '{print $1}'` package(s) found"   
+    msg "* `wc -l $DESTDIR/files.txt |awk '{print $1}'` file(s) found"   
 }
 
 # update database
 
 ctan_update()
 {
-  if [[ "x$1" == "x--first-time" ]]; then
+  if [ "x$1" = "x--first-time" ]; then
     shift
     msg "This maybe the first time you use the tool."
     msg "The directory ~/.ctan will be created"
@@ -117,21 +114,21 @@ ctan_update()
     shift
     msg "update by using cache file..."
 
-    if [[ $HAVE_LZMA == 1 ]]; then
-      msg "getting $KYANHNET_REPOS/ctan.tools/cache.tlzma..."
-      wget $KYANHNET_REPOS/cache.tlzma -O $DESTDIR/cache.tlzma
+    if [ $HAVE_LZMA = 1 ]; then
+      msg "getting $VIETTUG_CACHEDIR/ctan.tools/cache.tlzma..."
+      wget $VIETTUG_CACHEDIR/cache.tlzma -O $DESTDIR/cache.tlzma
 
       msg "uncompressing $DESTDIR/cache.tlzma..."
       lzma --decompress < $DESTDIR/cache.tlzma | tar xvf - -C $DESTDIR
     else
-      msg "getting $KYANHNET_REPOS/ctan.tools/cache.tbz..."
-      wget $KYANHNET_REPOS/cache.tbz -O $DESTDIR/cache.tbz
+      msg "getting $VIETTUG_CACHEDIR/ctan.tools/cache.tbz..."
+      wget $VIETTUG_CACHEDIR/cache.tbz -O $DESTDIR/cache.tbz
 
       msg "uncompressing $DESTDIR/cache.tbz..."
       tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
     fi
 
-    msg "removing {dirs,files,dump_files}.txt as it is too big..."
+    msg "now remove some big files"
     rm -fv $DESTDIR/{dump_files.txt,cache.tbz,cache.tlzma}
 
     ctan_info
@@ -139,70 +136,47 @@ ctan_update()
     return 0
   fi
 
-  # donot use cache. download directly from CTAN (15MB)
-
-  msg "update will get about 15MB from CTAN and may take very long time."
-  read -n1 -p":: Are you sure you wanna do this (y/N)?" reply
-  msg
-  if [[ ! "x$reply" == "xy" ]]; then
+  msg "update will get about 8MB from CTAN and may take very long time."
+  read -n1 -p":: Are you sure you wanna do this (y/N)? " reply
+  echo ""
+  if [ ! "x$reply" = "xy" ]; then
     msg "Update was cancelled."
     return 0
   fi
 
-  # create list of packages ####################################################
-
   ctan_mirror_select $CTAN_MIRROR
-  
-  msg "getting list of packages from $CTAN_CONTRIB..."
-  lynx -dump $CTAN_CONTRIB > $DESTDIR/contrib.txt
-  grep -E '^[ ]*\[[0-9]+\][^ ]+/' $DESTDIR/contrib.txt \
-    |gawk '{printf("%s, %s\n", $1,$2);}' \
-    |sed \
-      -e 's/\/, /\t/g' \
-      -e 's#\[[0-9]\+\]##g' \
-    > $DESTDIR/packages.txt
-
-  # create list of files #######################################################
 
   msg "searching all files. please wait as this is a heavy task"
-
-  # sorry but I don't know how to user a mirror here...
-  lynx -dump 'http://ctan.org/cgi-bin/filenameSearch.py?filename=.' \
-    > $DESTDIR/dump_files.txt
-
-  if [[ $? -gt 0 ]]; then
+  # lynx -dump $CTAN_FILES > $DESTDIR/dump_files.txt
+  cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/dump_files.txt
+  if [ $? -gt 0 ]; then
     msg "failed to download from CTAN. exit 1"
     rm -fv $DESTDIR/dump_files.txt
     exit 1
   fi
 
-  msg "creating list of directories..."
-
-  grep tex-archive/ $DESTDIR/dump_files.txt \
-    |sed \
-      -e 's/#/ /g' \
-      -e 's#http://ctan.org/tex-archive/# #g' \
-    |gawk '{print $2}' \
-    |sort -u \
-    > $DESTDIR/dirs.txt
-
   msg "creating list of files..."
+  cat $DESTDIR/dump_files.txt > $DESTDIR/files.txt
 
-  grep -E '^\[[0-9]+\][^ ]+' $DESTDIR/dump_files.txt \
-    |gawk -F']' '{print $2}'\
-    |sort -u \
-    > $DESTDIR/files.txt
+  msg "getting list of LaTeX packages..."
+  grep -E "| macros/latex/contrib" $DESTDIR/files.txt \
+    |grep -v 'info/' \
+    |grep -E '\.(zip|sty|dtx)' \
+    |sed -e 's#/[^/]*$##g' \
+    |sed -e 's#macros/latex/contrib/##g' \
+    |sort -uk5 \
+    > $DESTDIR/packages.txt
 
   msg "compressing the results..."
   cd $DESTDIR
   
   msg "creating tbz archive..."
-  tar -cvj -f .cache.tbz {dirs,files,packages}.txt
+  #tar -cvj -f .cache.tbz {files,packages}.txt
   mv .cache.tbz cache.tbz
   
-  if [[ $HAVE_LZMA == 1 ]]; then
+  if [ $HAVE_LZMA = 1 ]; then
     msg "creating lzma archive..."
-    tar -cv --use-compress-program lzma -f .cache.tlzma {dirs,files,packages}.txt
+    # tar -cv --use-compress-program lzma -f .cache.tlzma {files,packages}.txt
     mv .cache.tlzma cache.tlzma
   fi
 
@@ -222,14 +196,14 @@ ctan_update()
 
 ctan_search()
 {
-  [[ -d $DESTDIR/ ]] || ctan_update --first-time --use-cache
-  if [[ "x$1" == "x-file" ]]; then
+  [ -d $DESTDIR/ ] || ctan_update --first-time --use-cache
+  if [ "x$1" = "x-file" ]; then
     shift
     grep $* $DESTDIR/files.txt | grep -v obsolete
   else # search package name  
     grep $* $DESTDIR/packages.txt | grep -v obsolete
   fi  
-  if [[ $? -gt 0 ]]; then
+  if [ $? -gt 0 ]; then
     msg "no package/file found"
     return 1
   fi
@@ -239,47 +213,45 @@ ctan_search()
 
 ctan_get()
 {
-  ctan_search $* > $DESTDIR/tmp.txt
-  if [[ $? -gt 0 ]]; then
+  RETFOUND=$DESTDIR/tmp2.txt
+  RETDOWN=$DESTDIR/tmp.txt
+  ctan_search $* > $RETFOUND
+
+  if [ $? -gt 0 ]; then
     msg "no package matches '$*'"
     return
   fi
-  if [[ "x$1" == "x-file" ]]; then
+  if [ "x$1" = "x-file" ]; then
     shift
     ctan_grep_type='file'
   else
     ctan_grep_type='pkg'
   fi
-  if [[ "$ctan_grep_type" == "file" ]]; then    
-    for pkg in `cat $DESTDIR/tmp.txt`; do
-      msg "$CTAN_ARCHIVE/$pkg";     
-    done
-    msg
-    read -n 1 -p ":: Are you sure you want to download (y/N)?" download
+
+  cat $RETFOUND
+  awk '{print $5}' $RETFOUND > $RETDOWN
+
+  if [ "$ctan_grep_type" = "file" ]; then    
+    read -n 1 -p ":: Are you sure you want to download (y/N)? " download
+    echo ''
     if [[ "x$download" == "xy" ]]; then
-      msg
       ctan_mirror_select $CTAN_MIRROR
-      for pkg in `cat $DESTDIR/tmp.txt`; do
+      for pkg in `cat $RETDOWN`; do
         msg "downloading $pkg..."
-        wget -c "$CTAN_ARCHIVE/$pkg";
-      done        
-    fi    
+        wget -nv -c "$CTAN_ARCHIVE/$pkg";
+      done
+    fi
   else
-    gawk '{print $1}' $DESTDIR/tmp.txt > $DESTDIR/tmp2.txt
-    for pkg in `cat $DESTDIR/tmp2.txt`; do
-      msg "$pkg\t $CTAN_CONTRIB/$pkg.zip";
-    done
-    msg
-    read -n 1 -p "Are you sure you want to download (y/N)?" download
+    read -n 1 -p "Are you sure you want to download (y/N)? " download
+    echo ''
     if [[ "x$download" == "xy" ]]; then
-      msg
       ctan_mirror_select $CTAN_MIRROR
-      for f in `cat $DESTDIR/tmp2.txt`; do
-        msg "downloading $pkg..."
-        wget -c "$CTAN_CONTRIB/$pkg.zip";
+      for pkg in `cat $RETDOWN`; do
+        msg "downloading $pkg"
+        wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
       done  
     fi
-  fi  
+  fi
 }
 
 ctan_about()
@@ -290,7 +262,7 @@ ctan_about()
   msg "\t\t$CTAN_CONTRIB (or its mirror)"
   msg "\tor search/download any files in $CTAN_ARCHIVE"
   msg ""
-  msg "\tSince version 1.0.1 this tool uses the cache $KYANHNET_REPOS/cache.tbz."
+  msg "\tSince version 1.0.1 this tool uses the cache $VIETTUG_CACHEDIR/cache.tbz."
   msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job"
   msg "\thosted by VietTUG <http://viettug.org/>. The size of file is about 400k."
   msg
@@ -344,8 +316,8 @@ ctan_usage()
   msg "\tctan usage           : show usage"
   msg "\tctan version         : show script version"
   msg
-  msg "\tctan update          : update using $KYANHNET_REPOS/cache.tbz (450k)"
-  msg "\tctan update --direct : update directly from CTAN. You are going to download 15MB"
+  msg "\tctan update          : update using $VIETTUG_CACHEDIR/cache.tbz (450k)"
+  msg "\tctan update --direct : update directly from CTAN. You are going to download 8MB"
   msg "\tctan grep <string>   : search packages match <string>. grep ability is supported"
   msg "\tctan get  <string>   : download packages match <string> to working directory"
   msg
@@ -370,10 +342,10 @@ ctan_usage()
 
 ctan_arg()
 {
-  if [[ "x$1" == "x-file" ]]; then
+  if [ "x$1" = "x-file" ]; then
     shift
   fi  
-  if [[ "x$1" == "x" ]]; then
+  if [ "x$1" = "x" ]; then
     msg "missing parameter"
     exit 1
   fi

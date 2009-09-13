@@ -9,7 +9,7 @@ ABOUT
 	hosted by VietTUG <http://viettug.org/>. The size of file is about 400k.
 
 	The tool requires following tools to work correctly
-		lynx wget tar bzip2 sed sort gawk grep
+		lynx wget tar bzip2 sed sort awk grep
 	Some linux distributions require that you install lynx manually.
 
 	This tool was written by Anh K. Huynh <xkyanh@gmail.com>
