@@ -91,7 +91,6 @@ ctan_mirror_select() {
 
 ctan_info()
 {
-    msg
     msg "* `wc -l $DESTDIR/packages.txt |awk '{print $1}'` package(s) found"   
     msg "* `wc -l $DESTDIR/files.txt |awk '{print $1}'` file(s) found"   
 }
@@ -380,6 +379,10 @@ case "x$1" in
   shift
   ctan_arg $*
   ctan_get $*
+  ;;
+"xinfo")
+  shift
+  ctan_info
   ;;
 "xfget")
   shift
