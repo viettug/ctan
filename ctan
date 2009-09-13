@@ -249,30 +249,21 @@ ctan_about()
 {
   msg "ABOUT"
   msg
-  msg "\tThis small tool is used to seach/download some LaTeX packages that were listed in"
-  msg "\t\t$CTAN_CONTRIB (or its mirror)"
-  msg "\tor search/download any files in $CTAN_ARCHIVE"
+  msg "\tThis jifty tool helps you to seach/download LaTeX packages listed at"
+  msg "\t\t$CTAN_CONTRIB"
+  msg "\tor search/download any files in $CTAN_ARCHIVE (or its mirror)."
   msg ""
-  msg "\tSince version 1.0.1 this tool uses the cache $VIETTUG_CACHEDIR/cache.tbz."
-  msg "\tThis file contains the list of all files in CTAN. It's updated daily by a cron job"
-  msg "\thosted by VietTUG <http://viettug.org/>. The size of file is about 400k."
-  msg
-  msg "\tThe tool requires following tools to work correctly"
+  msg "\tThe tool requires following programs"
   msg "\t\t$TOOLS"
-  msg "\tSome linux distributions require that you install lynx manually."
   msg
-  msg "\tThis tool was written by Anh K. Huynh <xkyanh@gmail.com>"
+  msg "\tThis tool was written by Anh K. Huynh <xkyanh@gmail.com>."
   msg
   msg "VERSION"
   msg
   msg "\t1.0.0 2008/05/11: first version"
   msg "\t1.1.0 2008/05/15: search files (use cache file)"
-  msg "\t1.1.1 2008/05/15: fix bug (ctan_update)"
   msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
   msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer."
-  msg "\t1.3.1 2008/05/24: fix typo. lzma support"
-  msg "\t1.3.2 2009/04/18: lzma option fixed"
-  msg "\t1.3.3 2009/09/08: lzma problem fixed" 
   msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)" 
   msg "\t1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname" 
   msg
@@ -308,7 +299,7 @@ ctan_usage()
   msg "\tctan usage           : show usage"
   msg "\tctan version         : show script version"
   msg
-  msg "\tctan update          : update using $VIETTUG_CACHEDIR/cache.tbz (450k)"
+  msg "\tctan update          : update using $VIETTUG_CACHEDIR/cache.tbz (~1MB)"
   msg "\tctan update --direct : update directly from CTAN. You are going to download 8MB"
   msg "\tctan grep <string>   : search packages match <string>. grep ability is supported"
   msg "\tctan get  <string>   : download packages match <string> to working directory"
