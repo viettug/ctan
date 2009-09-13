@@ -44,7 +44,7 @@ ctan_check()
 
 ctan_check_all()
 {
-  # msg "checking dependencies..."
+  msg "checking dependencies..."
   ERROR=0
   for tool in $TOOLS; do
     ctan_check $tool
@@ -53,6 +53,7 @@ ctan_check_all()
     msg "error occured. exit 1"
     exit 1
   fi
+  msg "tools found: $TOOLS"
 
   ctan_check lzma
   if [ $? = 0 ]; then
@@ -347,16 +348,11 @@ ctan_arg()
 
 # check for requirements or not
 
-case "x$1" in
-"xusage");;
-"xhelp");;
-"x");;
-"xabout");;
-"xdoc");;
-"xversion");;
-"xcheck");;
-*) ctan_check_all;;
-esac
+not_check="xusage:xhelp:xabout:xdoc:xversion:xcheck:"
+if ! `echo $not_check | grep -q "x$1"`; then
+  ctan_check_all
+fi
+
 
 # main program
 
@@ -394,7 +390,7 @@ case "x$1" in
 "xhelp") ctan_usage;;
 "xdoc") ctan_about;;
 "xabout") ctan_about;;
-"xversion") grep '^# $Id' $0;;
+"xversion") msg '$Id $';;
 "xcheck") ctan_check_all;;
 *)
   msg "wrong parameter. please try 'ctan usage'"
