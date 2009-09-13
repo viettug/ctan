@@ -390,7 +390,7 @@ case "x$1" in
 "xhelp") ctan_usage;;
 "xdoc") ctan_about;;
 "xabout") ctan_about;;
-"xversion") msg '$Id $';;
+"xversion") msg '$Id$';;
 "xcheck") ctan_check_all;;
 *)
   msg "wrong parameter. please try 'ctan usage'"
