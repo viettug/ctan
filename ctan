@@ -66,7 +66,8 @@ ctan_check_all()
 # mirror detection
 # see also http://viettug.org/blogs/show/310
 
-ctan_mirror_select() {
+ctan_mirror_select()
+{
   msg "Hello, this is ctan_mirror_select"
   src="$1"
   msg "found $src"
@@ -133,6 +134,11 @@ ctan_update()
     return 0
   fi
 
+  # updating by downloading database from CTAN
+  # previous version uses a search result returned by CTAN
+  # since 1.5.0, Jim Hefferon suggest to use FILES.byname
+  # see also (ctan_joiner)
+
   msg "update will get about 8MB from CTAN and may take very long time."
   read -n1 -p":: Are you sure you wanna do this (y/N)? " reply
   echo ""
@@ -144,15 +150,16 @@ ctan_update()
   ctan_mirror_select $CTAN_MIRROR
 
   msg "searching all files. please wait as this is a heavy task"
-  lynx -dump $CTAN_FILES > $DESTDIR/files.txt
-  #cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/dump_files.txt
+  lynx -dump $CTAN_FILES > $DESTDIR/tmp0.txt
+  # cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/tmp0.txt
   if [ $? -gt 0 ]; then
     msg "failed to download from CTAN. exit 1"
-    rm -fv $DESTDIR/files.txt
+    rm -fv $DESTDIR/tmp0.txt
     exit 1
   fi
 
   msg "getting list of LaTeX packages..."
+  ctan_joiner $DESTDIR/tmp0.txt > $DESTDIR/files.txt
   grep '| macros/latex/contrib' $DESTDIR/files.txt \
     |grep -v 'info/' \
     |grep -E '\.(zip|sty|dtx)' \
@@ -160,10 +167,12 @@ ctan_update()
     |sed -e 's#| macros/latex/contrib/#| #g' \
     |sort -uk5 \
     > $DESTDIR/packages.txt
+  msg "removing temporary file..."  
+  rm -fv $DESTDIR/tmp0.txt
 
   msg "compressing the results..."
   cd $DESTDIR
-  
+
   msg "creating tbz archive..."
   tar -cvj -f .cache.tbz {files,packages}.txt
   mv .cache.tbz cache.tbz
@@ -180,7 +189,6 @@ ctan_update()
     msg "removing all temporary files. Only cache is kept"
     rm -fv $DESTDIR/*.txt
   fi
-    
 }
 
 # search something
@@ -243,6 +251,34 @@ ctan_get()
       done  
     fi
   fi
+}
+
+#
+# awk script to join lines in FILES.byname
+# some server wraps long lines hence we need this script
+#
+ctan_joiner() 
+{
+  awk '
+    BEGIN {
+      a = ""
+    }
+    {
+      if ( $0 ~ /^[0-9]+/ ) {
+        if (a != "") print a
+        a=$0
+      }
+      else{
+        a = (a $0)
+      }
+    }
+    END {
+      if ( $0 !~ /^[0-9]+/ ) {
+        a = (a $0)
+      }
+      if (a != "") print a
+    }' \
+    $*
 }
 
 ctan_about()
@@ -323,7 +359,6 @@ not_check="xusage:xhelp:xabout:xdoc:xversion:xcheck:"
 if ! `echo $not_check | grep -q "x$1"`; then
   ctan_check_all
 fi
-
 
 # main program
 
