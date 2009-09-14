@@ -276,6 +276,9 @@ ctan_joiner()
       if ( $0 !~ /^[0-9]+/ ) {
         a = (a $0)
       }
+      else {
+        a = $0
+      }
       if (a != "") print a
     }' \
     $*
