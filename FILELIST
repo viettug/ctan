@@ -1,11 +1,2 @@
-FILELIST
-FILES.byname
-INSTALL
-Makefile
 README
-SCRIPT
 ctan
-ctan_dump_files
-index.html
-index.html.1
-ls-lR

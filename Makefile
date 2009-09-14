@@ -1,11 +1,12 @@
-FILES=ctan README
+FILES=ctan README FILELIST
 default:
 
 readme: install
 	@ctan about |sed -e 's/:: //g' > README
 
 filelist:
-	@echo do nothing
+	@echo README > FILELIST
+	@echo ctan   >> FILELIST
 
 distro: readme filelist
 	@chmod +x ./ctan
