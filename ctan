@@ -159,13 +159,16 @@ ctan_update()
   fi
 
   msg "getting list of LaTeX packages..."
-  ctan_joiner $DESTDIR/tmp0.txt > $DESTDIR/files.txt
-  grep '| macros/latex/contrib' $DESTDIR/files.txt \
+  ctan_joiner $DESTDIR/tmp0.txt \
+    |sed -e 's# ##g' \
+    > $DESTDIR/files.txt
+  pkg_filter='|macros/latex/contrib'
+  grep $pkg_filter $DESTDIR/files.txt \
     |grep -v 'info/' \
     |grep -E '\.(zip|sty|dtx)' \
     |sed -e 's#/[^/]*$##g' \
-    |sed -e 's#| macros/latex/contrib/#| #g' \
-    |sort -uk5 \
+    |sed -e "s#$pkg_filter#|#g" \
+    |sort -t'|' -uk3 \
     > $DESTDIR/packages.txt
   msg "removing temporary file..."  
   rm -fv $DESTDIR/tmp0.txt
@@ -198,9 +201,13 @@ ctan_search()
   [ -d $DESTDIR/ ] || ctan_update --first-time --use-cache
   if [ "x$1" = "x-file" ]; then
     shift
-    grep $* $DESTDIR/files.txt | grep -v obsolete
+    grep $* $DESTDIR/files.txt \
+      |grep -v obsolete \
+      |sed -e 's#|#  |  #g'
   else # search package name  
-    grep $* $DESTDIR/packages.txt | grep -v obsolete
+    grep $* $DESTDIR/packages.txt \
+      |grep -v obsolete \
+      |sed -e 's#|#  |  #g'
   fi  
   if [ $? -gt 0 ]; then
     msg "no package/file found"
@@ -228,7 +235,7 @@ ctan_get()
   fi
 
   cat $RETFOUND
-  awk '{print $5}' $RETFOUND > $RETDOWN
+  awk -F'|' '{print $3}' $RETFOUND > $RETDOWN
 
   if [ "$ctan_grep_type" = "file" ]; then    
     read -n 1 -p ":: Are you sure you want to download (y/N)? " download
@@ -246,7 +253,7 @@ ctan_get()
     if [[ "x$download" == "xy" ]]; then
       ctan_mirror_select $CTAN_MIRROR
       for pkg in `cat $RETDOWN`; do
-        msg "downloading $pkg"
+        msg "downloading ${pkg}.zip..."
         wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
       done  
     fi
@@ -405,4 +412,3 @@ case "x$1" in
   msg "wrong parameter. please try 'ctan usage'"
   ;;
 esac
-
