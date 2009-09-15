@@ -162,7 +162,7 @@ ctan_update()
   ctan_joiner $DESTDIR/tmp0.txt \
     |sed -e 's# ##g' \
     > $DESTDIR/files.txt
-  pkg_filter='|macros/latex/contrib'
+  pkg_filter='|macros/latex/contrib/'
   grep $pkg_filter $DESTDIR/files.txt \
     |grep -v 'info/' \
     |grep -E '\.(zip|sty|dtx)' \
@@ -203,11 +203,11 @@ ctan_search()
     shift
     grep $* $DESTDIR/files.txt \
       |grep -v obsolete \
-      |sed -e 's#|#  |  #g'
+      |awk -F '|' '{printf("%s | %s\t| %s\n",$1, $2, $3)}'
   else # search package name  
     grep $* $DESTDIR/packages.txt \
       |grep -v obsolete \
-      |sed -e 's#|#  |  #g'
+      |awk -F '|' '{printf("%s | %s\t| %s\n",$1, $2, $3)}'
   fi  
   if [ $? -gt 0 ]; then
     msg "no package/file found"
