@@ -4,7 +4,7 @@
 # Author      : Anh K. Huynh <xkyanh@gmail.com>
 # Version     : $Id$
 # License     : LPPL (any version)
-# Homepage    : CTAN:/contrib/ctan.tools
+# Homepage    : CTAN:/support/ctan.tools
 # Document    : self documented, try `$0 about`
 # Requirements: bash, lynx, wget, tar, bzip2,
 #               sed, sort, awk, (e)grep, cut
