@@ -37,7 +37,7 @@ ctan_check()
     ERROR=1
     msg "not found '$1'"
     return 1
-  fi  
+  fi
 }
 
 # check for all tools
@@ -59,7 +59,6 @@ ctan_check_all()
   if [ $? = 0 ]; then
     HAVE_LZMA=1
   fi
-  
   return 0
 }
 
