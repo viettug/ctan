@@ -73,7 +73,7 @@ ctan_mirror_select()
   while true; do
     location="`wget --max-redirect=0 $src -O - 2>&1 1>/dev/null| grep Location: 2>/dev/null`"
     if [ $? -eq 0 ]; then
-      src="`echo $location | cut -d' ' -f2`"
+      src="$(echo $location | cut -d' ' -f2)"
       msg "found $src"
     else
       break
@@ -89,8 +89,8 @@ ctan_mirror_select()
 
 ctan_info()
 {
-    msg "* `wc -l $DESTDIR/packages.txt |awk '{print $1}'` package(s) found"   
-    msg "* `wc -l $DESTDIR/files.txt |awk '{print $1}'` file(s) found"   
+    msg "* `wc -l $DESTDIR/packages.txt |awk '{print $1}'` package(s) found"
+    msg "* `wc -l $DESTDIR/files.txt |awk '{print $1}'` file(s) found"
 }
 
 # update database
@@ -169,7 +169,7 @@ ctan_update()
     |sed -e "s#$pkg_filter#|#g" \
     |sort -t'|' -uk3 \
     > $DESTDIR/packages.txt
-  msg "removing temporary file..."  
+  msg "removing temporary file..."
   rm -fv $DESTDIR/tmp0.txt
 
   msg "compressing the results..."
@@ -178,7 +178,7 @@ ctan_update()
   msg "creating tbz archive..."
   tar -cvj -f .cache.tbz {files,packages}.txt
   mv .cache.tbz cache.tbz
-  
+
   if [ $HAVE_LZMA = 1 ]; then
     msg "creating lzma archive..."
     tar -cv --use-compress-program lzma -f .cache.tlzma {files,packages}.txt
@@ -203,11 +203,11 @@ ctan_search()
     grep $* $DESTDIR/files.txt \
       |grep -v obsolete \
       |awk -F '|' '{printf("%s | %s\t| %s\n",$1, $2, $3)}'
-  else # search package name  
+  else # search package name
     grep $* $DESTDIR/packages.txt \
       |grep -v obsolete \
       |awk -F '|' '{printf("%s | %s\t| %s\n",$1, $2, $3)}'
-  fi  
+  fi
   if [ $? -gt 0 ]; then
     msg "no package/file found"
     return 1
@@ -236,12 +236,13 @@ ctan_get()
   cat $RETFOUND
   awk -F'|' '{print $3}' $RETFOUND > $RETDOWN
 
-  if [ "$ctan_grep_type" = "file" ]; then    
+  if [ "$ctan_grep_type" = "file" ]; then
     read -n 1 -p ":: Are you sure you want to download (y/N)? " download
     echo ''
     if [[ "x$download" == "xy" ]]; then
       ctan_mirror_select $CTAN_MIRROR
-      for pkg in `cat $RETDOWN`; do
+      for pkg in $(cat $RETDOWN); do
+        msg "origin source = $CTAN_MIRROR/$pkg"
         msg "downloading $pkg..."
         wget -nv -c "$CTAN_ARCHIVE/$pkg";
       done
@@ -254,7 +255,7 @@ ctan_get()
       for pkg in `cat $RETDOWN`; do
         msg "downloading ${pkg}.zip..."
         wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
-      done  
+      done
     fi
   fi
 }
@@ -263,7 +264,7 @@ ctan_get()
 # awk script to join lines in FILES.byname
 # some server wraps long lines hence we need this script
 #
-ctan_joiner() 
+ctan_joiner()
 {
   awk '
     BEGIN {
@@ -306,8 +307,8 @@ ctan_about()
   msg "\t1.1.0 2008/05/15: search files (use cache file)"
   msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
   msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer."
-  msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)" 
-  msg "\t1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname" 
+  msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)"
+  msg "\t1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname"
   ctan_usage
   msg "TODO"
   msg "\t* package information supported"
@@ -355,7 +356,7 @@ ctan_arg()
 {
   if [ "x$1" = "x-file" ]; then
     shift
-  fi  
+  fi
   if [ "x$1" = "x" ]; then
     msg "missing parameter"
     exit 1
