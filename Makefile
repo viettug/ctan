@@ -2,7 +2,7 @@ FILES=ctan README FILELIST
 default:
 	@echo "Please use VERSION environment to generate new archive"
 
-readme:
+README: ctan Makefile
 	@ctan about |sed -e 's/:: //g' > README
 
 filelist:
