@@ -1,27 +1,23 @@
 FILES=ctan README FILELIST
 default:
+	@echo "Please use VERSION environment to generate new archive"
 
-readme: install
+readme:
 	@ctan about |sed -e 's/:: //g' > README
 
 filelist:
 	@echo README > FILELIST
 	@echo ctan   >> FILELIST
 
-distro: readme filelist
-	@chmod +x ./ctan
-	@rm -fv ctan_tools.zip
-	@mkdir -pv ctan_tools
+releases/ctan_tools-$(VERSION).zip: readme filelist
+	@[[ ! -f $(@) ]] && [[ -n "$(VERSION)" ]] \
+		|| { \
+			echo ":: File '$(@)' does exist, or '$$VERSION' is empty." ; \
+			false ; }
+	@rm -rf ctan_tools; mkdir ctan_tools
 	@cp $(FILES) ctan_tools
-	@zip -9r ctan_tools.zip ctan_tools
+	@chmod +x ctan_tools/ctan
+	@zip -9r $(@) ctan_tools/
 
-install:
-	@install -v -m 750 ./ctan $(HOME)/bin
-
-all: readme filelist distro
-
-upload:
-	@echo "* update remote script"
-	@echo "* update blog"
-	@echo "* update viettug repository"
-	@site5.up -d bin ctan
+release: releases/ctan_tools-$(VERSION).zip
+	@echo "New archive is created at 'releases/ctan_tools-$(VERSION).zip'"
