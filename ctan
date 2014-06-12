@@ -2,11 +2,10 @@
 
 # Description : A jiffy to search CTAN file list
 # Author      : Anh K. Huynh <xkyanh@gmail.com>
-# Version     : $Id$
 # License     : LPPL (any version)
 # Homepage    : CTAN:/support/ctan.tools
 # Document    : self documented, try `$0 about`
-# Requirements: bash, lynx, wget, tar, bzip2,
+# Requirements: bash, wget, tar, bzip2,
 #               sed, sort, awk, (e)grep, cut
 # TODO        : fancy get options (code/interface)
 
@@ -18,7 +17,7 @@ CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/  # to be updated
 CTAN_FILES=$CTAN_ARCHIVE/FILES.byname             # to be updated
 VIETTUG_CACHEDIR=http://viettug.org/ctan.tools/
 DESTDIR=$HOME/.ctan/
-TOOLS="lynx wget tar bzip2 sed sort awk grep"
+TOOLS="wget tar bzip2 sed sort awk grep"
 HAVE_LZMA=0
 
 # functions
@@ -108,6 +107,10 @@ ctan_update()
   # using the cache file http://kyanh.net/ctan.tools/cache.tbz
 
   if [[ ( "x$1" == "x" ) || ( "x$1" == "x--use-cache" ) ]]; then
+    echo >&2 ":: Error: The cache file is not supported anymore."
+    echo >&2 ":: Please update with '--direct' option instead."
+    exit 1
+
     shift
     msg "update by using cache file..."
 
@@ -149,16 +152,15 @@ ctan_update()
   ctan_mirror_select $CTAN_MIRROR
 
   msg "searching all files. please wait as this is a heavy task"
-  lynx -dump $CTAN_FILES > $DESTDIR/tmp0.txt
-  # cp $HOME/projects/ctan.tools/FILES.byname $DESTDIR/tmp0.txt
+  wget $CTAN_FILES -O - > $DESTDIR/FILES.byname
   if [ $? -gt 0 ]; then
     msg "failed to download from CTAN. exit 1"
-    rm -fv $DESTDIR/tmp0.txt
+    rm -fv $DESTDIR/FILES.byname
     exit 1
   fi
 
   msg "getting list of LaTeX packages..."
-  ctan_joiner $DESTDIR/tmp0.txt \
+  ctan_joiner $DESTDIR/FILES.byname \
     |sed -e 's# ##g' \
     > $DESTDIR/files.txt
   pkg_filter='|macros/latex/contrib/'
@@ -169,8 +171,6 @@ ctan_update()
     |sed -e "s#$pkg_filter#|#g" \
     |sort -t'|' -uk3 \
     > $DESTDIR/packages.txt
-  msg "removing temporary file..."
-  rm -fv $DESTDIR/tmp0.txt
 
   msg "compressing the results..."
   cd $DESTDIR
@@ -189,7 +189,10 @@ ctan_update()
 
   if [[ "x$1" == "x--keep-only-cache" ]]; then
     msg "removing all temporary files. Only cache is kept"
-    rm -fv $DESTDIR/*.txt
+    rm -fv $DESTDIR/*.txt FILES.byname
+  else
+    msg "you may look at the big file '~/.ctan/FILES.byname'"
+    msg "(it is safe to delete that file now.)"
   fi
 }
 
