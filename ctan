@@ -304,14 +304,7 @@ ctan_about()
   msg "\tThe tool requires following programs"
   msg "\t\t$TOOLS"
   msg
-  msg "\tThis tool was written by Anh K. Huynh <xkyanh@gmail.com>."
-  msg "VERSION"
-  msg "\t1.0.0 2008/05/11: first version"
-  msg "\t1.1.0 2008/05/15: search files (use cache file)"
-  msg "\t1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>"
-  msg "\t1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer."
-  msg "\t1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)"
-  msg "\t1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname"
+  msg "\tThis tool was written by Anh K. Huynh <kyanh@viettug.org>."
   ctan_usage
   msg "TODO"
   msg "\t* package information supported"
@@ -324,7 +317,7 @@ ctan_about()
   msg "LICENSE"
   msg "\tThis tool is published under LPPL."
   msg "BUGS"
-  msg "\tPlease report to kyanh <xkyanh@gmail.com>."
+  msg "\tPlease use the ticket system https://github.com/viettug/ctan/issues."
 }
 
 ctan_usage()
