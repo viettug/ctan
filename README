@@ -4,16 +4,9 @@ ABOUT
 	or search/download any files in http://ctan.org/tex-archive (or its mirror).
 
 	The tool requires following programs
-		lynx wget tar bzip2 sed sort awk grep
+		wget tar bzip2 sed sort awk grep
 
-	This tool was written by Anh K. Huynh <xkyanh@gmail.com>.
-VERSION
-	1.0.0 2008/05/11: first version
-	1.1.0 2008/05/15: search files (use cache file)
-	1.2.0 2008/05/16: smaller cache. Thanks to Karl Berry <karl@freefriends.org>
-	1.3.0 2008/05/23: everything is cached. Faster. New options. Thanks to texer.
-	1.4.0 2009/09/12: auto. select ctan mirror (suggested by Jim Hefferon)
-	1.5.0 2009/09/13: load database from http://mirror.ctan.org/FILES.byname
+	This tool was written by Anh K. Huynh <kyanh@viettug.org>.
 USAGE
 	ctan about           : show all information about this tool
 	ctan usage           : show usage
@@ -49,4 +42,4 @@ THANKS to
 LICENSE
 	This tool is published under LPPL.
 BUGS
-	Please report to kyanh <xkyanh@gmail.com>.
+	Please use the ticket system https://github.com/viettug/ctan/issues.
