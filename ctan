@@ -9,14 +9,12 @@
 #               sed, sort, awk, (e)grep, cut
 # TODO        : fancy get options (code/interface)
 
-export PATH=$PATH:$HOME/bin
-
-CTAN_MIRROR=http://mirror.ctan.org/
-CTAN_ARCHIVE=http://ctan.org/tex-archive          # to be updated
-CTAN_CONTRIB=$CTAN_ARCHIVE/macros/latex/contrib/  # to be updated
-CTAN_FILES=$CTAN_ARCHIVE/FILES.byname             # to be updated
-VIETTUG_CACHEDIR=http://viettug.org/ctan.tools/
-DESTDIR=$HOME/.ctan/
+CTAN_MIRROR="http://mirror.ctan.org/"
+CTAN_ARCHIVE="http://ctan.org/tex-archive "         # to be updated
+CTAN_CONTRIB="$CTAN_ARCHIVE/macros/latex/contrib/"  # to be updated
+CTAN_FILES="$CTAN_ARCHIVE/FILES.byname"             # to be updated
+VIETTUG_CACHEDIR="http://ctan.viettug.org/"
+DESTDIR="$HOME/.ctan/"
 TOOLS="wget tar bzip2 sed sort awk grep"
 HAVE_LZMA=0
 
@@ -107,10 +105,6 @@ ctan_update()
   # using the cache file http://kyanh.net/ctan.tools/cache.tbz
 
   if [[ ( "x$1" == "x" ) || ( "x$1" == "x--use-cache" ) ]]; then
-    echo >&2 ":: Error: The cache file is not supported anymore."
-    echo >&2 ":: Please update with '--direct' option instead."
-    exit 1
-
     shift
     msg "update by using cache file..."
 
