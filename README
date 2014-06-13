@@ -1,7 +1,7 @@
 ABOUT
 	This jifty tool helps you to seach/download LaTeX packages listed at
-		http://ctan.org/tex-archive/macros/latex/contrib/
-	or search/download any files in http://ctan.org/tex-archive (or its mirror).
+		http://ctan.org/tex-archive /macros/latex/contrib/
+	or search/download any files in http://ctan.org/tex-archive  (or its mirror).
 
 	The tool requires following programs
 		wget tar bzip2 sed sort awk grep
@@ -12,7 +12,7 @@ USAGE
 	ctan usage           : show usage
 	ctan version         : show script version
 
-	ctan update          : update using http://viettug.org/ctan.tools//cache.tbz (~1MB)
+	ctan update          : update using http://ctan.viettug.org//cache.tbz (~1MB)
 	ctan update --direct : update directly from CTAN. You are going to download 8MB
 	ctan grep <string>   : search packages match <string>. grep ability is supported
 	ctan get  <string>   : download packages match <string> to working directory
