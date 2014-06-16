@@ -76,7 +76,9 @@ ctan_mirror_select()
   src="$1"
   msg "found $src"
   while true; do
-    location="`wget --max-redirect=0 $src -O - 2>&1 1>/dev/null| grep Location: 2>/dev/null`"
+    location="$( \
+      wget --max-redirect=0 $src -O - 2>&1 1>/dev/null \
+      | grep Location: 2>/dev/null)"
     if [ $? -eq 0 ]; then
       src="$(echo $location | cut -d' ' -f2)"
       msg "found $src"
@@ -94,8 +96,8 @@ ctan_mirror_select()
 
 ctan_info()
 {
-    msg "* `wc -l $DESTDIR/packages.txt |awk '{print $1}'` package(s) found"
-    msg "* `wc -l $DESTDIR/files.txt |awk '{print $1}'` file(s) found"
+    msg "* $(wc -l $DESTDIR/packages.txt |awk '{print $1}') package(s) found"
+    msg "* $(wc -l $DESTDIR/files.txt |awk '{print $1}') file(s) found"
 }
 
 # update database
@@ -257,7 +259,7 @@ ctan_get()
     echo ''
     if [[ "x$download" == "xy" ]]; then
       ctan_mirror_select $CTAN_MIRROR
-      for pkg in `cat $RETDOWN`; do
+      for pkg in "$(cat $RETDOWN)"; do
         msg "downloading ${pkg}.zip..."
         _wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
       done
@@ -364,7 +366,7 @@ ctan_arg()
 # check for requirements or not
 
 not_check="xusage:xhelp:xabout:xdoc:xversion:xcheck:"
-if ! `echo $not_check | grep -q "x$1"`; then
+if ! $(echo $not_check | grep -q "x$1"); then
   ctan_check_all
 fi
 
