@@ -25,6 +25,14 @@ msg()
   echo -e ":: $*"
 }
 
+_wget() {
+  if [[ -t 0 || -p /dev/stdin ]]; then
+    wget "$@"
+  else
+    wget -nv "$@"
+  fi
+}
+
 # check for executable tool
 
 ctan_check()
@@ -110,13 +118,13 @@ ctan_update()
 
     if [ $HAVE_LZMA = 1 ]; then
       msg "getting $VIETTUG_CACHEDIR/ctan.tools/cache.tlzma..."
-      wget $VIETTUG_CACHEDIR/cache.tlzma -O $DESTDIR/cache.tlzma
+      _wget $VIETTUG_CACHEDIR/cache.tlzma -O $DESTDIR/cache.tlzma
 
       msg "uncompressing $DESTDIR/cache.tlzma..."
       lzma --decompress < $DESTDIR/cache.tlzma | tar xvf - -C $DESTDIR
     else
       msg "getting $VIETTUG_CACHEDIR/ctan.tools/cache.tbz..."
-      wget $VIETTUG_CACHEDIR/cache.tbz -O $DESTDIR/cache.tbz
+      _wget $VIETTUG_CACHEDIR/cache.tbz -O $DESTDIR/cache.tbz
 
       msg "uncompressing $DESTDIR/cache.tbz..."
       tar xfjv $DESTDIR/cache.tbz -C $DESTDIR
@@ -241,7 +249,7 @@ ctan_get()
       for pkg in $(cat $RETDOWN); do
         msg "origin source = $CTAN_MIRROR/$pkg"
         msg "downloading $pkg..."
-        wget -nv -c "$CTAN_ARCHIVE/$pkg";
+        _wget -nv -c "$CTAN_ARCHIVE/$pkg";
       done
     fi
   else
@@ -251,7 +259,7 @@ ctan_get()
       ctan_mirror_select $CTAN_MIRROR
       for pkg in `cat $RETDOWN`; do
         msg "downloading ${pkg}.zip..."
-        wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
+        _wget -nv -c "$CTAN_CONTRIB/${pkg}.zip";
       done
     fi
   fi
